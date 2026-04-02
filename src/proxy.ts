@@ -9,10 +9,9 @@ function getLocaleFromPath(pathname: string): string | null {
   return maybeLocale ?? null;
 }
 
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // Skip Next internals + static files
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/favicon") ||
@@ -23,14 +22,14 @@ export function middleware(req: NextRequest) {
 
   const pathLocale = getLocaleFromPath(pathname);
   if (pathLocale && isLocale(pathLocale)) {
-    // Keep cookie in sync with current locale
     const res = NextResponse.next();
     res.cookies.set(LOCALE_COOKIE, pathLocale, { path: "/" });
     return res;
   }
 
   const cookieLocale = req.cookies.get(LOCALE_COOKIE)?.value;
-  const locale = cookieLocale && isLocale(cookieLocale) ? cookieLocale : DEFAULT_LOCALE;
+  const locale =
+    cookieLocale && isLocale(cookieLocale) ? cookieLocale : DEFAULT_LOCALE;
 
   const url = req.nextUrl.clone();
   url.pathname = `/${locale}${pathname === "/" ? "" : pathname}`;
