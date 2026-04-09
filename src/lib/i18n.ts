@@ -590,6 +590,13 @@ const DYNAMIC_TR: Record<string, string> = {
   "Winkel & logistiek": "Perakende ve lojistik",
   "Zorg & huishoud": "Bakim ve ev isleri",
   "Horeca & hotel": "Hizmet ve otel",
+  "Feedback op je oefening - Noah": "Alistirmanla ilgili geri bildirim - Noah",
+  "Mevr. De Smet ↔ Leerling": "Bayan De Smet ↔ Ogrenci",
+  "Sterk gewerkt vandaag. Je hield goed tempo en je werkte netjes af.":
+    "Bugun cok iyi calistin. Tempoyu iyi korudun ve isi duzenli bitirdin.",
+  Klas: "Sinif",
+  "Dankjewel, ik ga dit morgen opnieuw proberen.":
+    "Tesekkur ederim, bunu yarin tekrar deneyecegim.",
 };
 
 const DYNAMIC_BG: Record<string, string> = {
@@ -692,6 +699,13 @@ const DYNAMIC_BG: Record<string, string> = {
     "Izberete rolia i ezik. Tova e demo vhod s primerni danni.",
   "Kies wat bij jou past. Je krijgt een ranglijst met mogelijke richtingen.":
     "Izberete kakvo vi podhozhda. Shte poluchite klasacia na vazmozhni nasoki.",
+  "Feedback op je oefening - Noah": "Obratna vruzka za uprazhnenieto ti - Noah",
+  "Mevr. De Smet ↔ Leerling": "G-ja De Smet ↔ Uchenik",
+  "Sterk gewerkt vandaag. Je hield goed tempo en je werkte netjes af.":
+    "Dnes raboti mnogo dobre. Poddurzhashe dobro tempo i priklyuchi podredeno.",
+  Klas: "Klas",
+  "Dankjewel, ik ga dit morgen opnieuw proberen.":
+    "Blagodarya, utre pak shte opitam.",
 };
 
 const DYNAMIC_SK: Record<string, string> = {
@@ -794,6 +808,13 @@ const DYNAMIC_SK: Record<string, string> = {
     "Vyberte rolu a jazyk. Toto je demo prihlasenie s testovacimi datami.",
   "Kies wat bij jou past. Je krijgt een ranglijst met mogelijke richtingen.":
     "Vyberte, co vam vyhovuje. Dostanete rebricek moznych smerov.",
+  "Feedback op je oefening - Noah": "Spatna vazba k tvojmu cviceniu - Noah",
+  "Mevr. De Smet ↔ Leerling": "Pani De Smet ↔ Ziak",
+  "Sterk gewerkt vandaag. Je hield goed tempo en je werkte netjes af.":
+    "Dnes si pracoval velmi dobre. Udrzal si dobre tempo a pracu si dokoncil poriadne.",
+  Klas: "Trieda",
+  "Dankjewel, ik ga dit morgen opnieuw proberen.":
+    "Dakujem, zajtra to skusim znova.",
 };
 
 const DYNAMIC_PS: Record<string, string> = {
@@ -896,6 +917,13 @@ const DYNAMIC_PS: Record<string, string> = {
     "يو رول او ژبه وټاکئ. دا د نمونې معلوماتو سره د ننوتلو بڼه ده.",
   "Kies wat bij jou past. Je krijgt een ranglijst met mogelijke richtingen.":
     "هغه څه وټاکئ چې درته مناسب دي. د ممکنه لارو لېست به ترلاسه کړئ.",
+  "Feedback op je oefening - Noah": "ستاسې د تمرين په اړه نظر - Noah",
+  "Mevr. De Smet ↔ Leerling": "مېرمن De Smet ↔ زده کوونکی",
+  "Sterk gewerkt vandaag. Je hield goed tempo en je werkte netjes af.":
+    "نن مو ډېر ښه کار وکړ. ښه سرعت مو وساته او کار مو منظم پای ته ورساوه.",
+  Klas: "ټولګی",
+  "Dankjewel, ik ga dit morgen opnieuw proberen.":
+    "مننه، سبا به دا بيا هڅه کړم.",
 };
 
 const DYNAMIC_FA: Record<string, string> = {
@@ -998,6 +1026,13 @@ const DYNAMIC_FA: Record<string, string> = {
     "یک نقش و زبان انتخاب کنید. این ورود نمونه با داده آزمایشی است.",
   "Kies wat bij jou past. Je krijgt een ranglijst met mogelijke richtingen.":
     "چیزی را انتخاب کنید که مناسب شماست. رتبه‌بندی مسیرهای ممکن را دریافت می‌کنید.",
+  "Feedback op je oefening - Noah": "بازخورد درباره تمرینت - Noah",
+  "Mevr. De Smet ↔ Leerling": "خانم De Smet ↔ دانش‌آموز",
+  "Sterk gewerkt vandaag. Je hield goed tempo en je werkte netjes af.":
+    "امروز خیلی خوب کار کردی. سرعت خوبی داشتی و کار را منظم تمام کردی.",
+  Klas: "صنف",
+  "Dankjewel, ik ga dit morgen opnieuw proberen.":
+    "تشکر، فردا دوباره این را امتحان می‌کنم.",
 };
 
 function reportMissing(locale: Locale, key: string, fallback: string) {
@@ -1053,10 +1088,10 @@ export function translate(locale: Locale, nlText: string): string {
     const found = DYNAMIC_FA[nlText];
     if (found) return found;
   }
-  // Pashto/Dari fallback to English as last resort.
-  if (locale === "ps" || locale === "fa") {
-    const foundEn = DYNAMIC_EN[nlText];
-    if (foundEn) return foundEn;
+  // Last-resort fallback for all non-NL locales to avoid Dutch leakage.
+  const fallbackEn = DYNAMIC_EN[nlText];
+  if (locale !== "nl" && fallbackEn) {
+    return fallbackEn;
   }
   if (locale !== "nl") {
     reportMissing(locale, `dynamic:${nlText}`, nlText);
