@@ -25,11 +25,11 @@ export function WorkshopsPage({
 
   const first = workshops[0];
   const subjectNl = first
-    ? `Uitnodiging: ${first.titleNl}`
-    : "Uitnodiging: workshop";
+    ? `${translate(locale, "Uitnodiging")}: ${translate(locale, first.titleNl)}`
+    : `${translate(locale, "Uitnodiging")}: ${translate(locale, "workshop")}`;
   const bodyNl = first
-    ? `Beste ouder/voogd,\n\nJe bent welkom op onze workshop.\n\nWanneer: ${stableDateTime(first.startsAt)}\nWaar: ${first.locationNl ?? "IVIO Binnenhof"}\n\nInschrijven is optioneel.\n\nMet vriendelijke groeten,\nIVIO Binnenhof`
-    : "Beste ouder/voogd,\n\n...";
+    ? `${translate(locale, "Beste ouder/voogd")},\n\n${translate(locale, "Je bent welkom op onze workshop.")}\n\n${translate(locale, "Wanneer")}: ${stableDateTime(first.startsAt)}\n${translate(locale, "Waar")}: ${translate(locale, first.locationNl ?? "IVIO Binnenhof")}\n\n${translate(locale, "Inschrijven is optioneel.")}\n\n${translate(locale, "Met vriendelijke groeten")},\nIVIO Binnenhof`
+    : `${translate(locale, "Beste ouder/voogd")},\n\n...`;
 
   return (
     <div className="flex flex-col gap-3">
@@ -38,7 +38,7 @@ export function WorkshopsPage({
           {t(locale, "workshops.title")}
         </h1>
         <p className="mt-2 text-sm text-zinc-600">
-          Overzicht + e-mail preview (prototype).
+          {translate(locale, "Overzicht + e-mail preview (prototype).")}
         </p>
       </div>
 
@@ -57,23 +57,23 @@ export function WorkshopsPage({
       <Card>
         <CardTitle>{t(locale, "workshops.emailPreview")}</CardTitle>
         <CardDescription>
-          Automatisch vertaald voor deze taal (MVP zonder externe service).
+          {translate(locale, "Automatisch vertaald voor deze taal (MVP zonder externe service).")}
         </CardDescription>
 
         <div className="mt-3 rounded-2xl border border-zinc-200 bg-zinc-50 p-3 text-sm">
           <div className="flex flex-col gap-2">
             <div>
-              <div className="text-xs font-semibold text-zinc-600">Aan</div>
+              <div className="text-xs font-semibold text-zinc-600">{translate(locale, "Aan")}</div>
               <div className="font-medium">ouder@example.com</div>
             </div>
             <div>
-              <div className="text-xs font-semibold text-zinc-600">Onderwerp</div>
-              <div className="font-medium">{translate(locale, subjectNl)}</div>
+              <div className="text-xs font-semibold text-zinc-600">{translate(locale, "Onderwerp")}</div>
+              <div className="font-medium">{subjectNl}</div>
             </div>
             <div>
-              <div className="text-xs font-semibold text-zinc-600">Bericht</div>
+              <div className="text-xs font-semibold text-zinc-600">{translate(locale, "Bericht")}</div>
               <pre className="mt-1 whitespace-pre-wrap font-sans text-sm leading-6 text-zinc-800">
-                {translate(locale, bodyNl)}
+                {bodyNl}
               </pre>
             </div>
           </div>

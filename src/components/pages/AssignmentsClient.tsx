@@ -1,83 +1,48 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import type { Locale } from "@/lib/locales";
 import { t, translate } from "@/lib/i18n";
 import { Card, CardDescription, CardTitle } from "@/components/ui/Card";
 import { Button, ButtonSecondary } from "@/components/ui/Button";
-import { useSession } from "@/components/session/SessionProvider";
 
-type Assignment = {
-  id: string;
-  titleNl: string;
-  descriptionNl: string;
-  kind: "memory" | "connect" | "reflection";
-};
-
-const ASSIGNMENTS: Assignment[] = [
+const ASSIGNMENTS = [
   {
     id: "as-1",
-    titleNl: "Memory (prototype)",
-    descriptionNl: "Vind twee dezelfde kaartjes. (Nu: snelle demo)",
+    titleNl: "Memory",
+    descriptionNl: "Klik start en stop wanneer je klaar bent. Snelste tijd wint.",
     kind: "memory",
   },
   {
     id: "as-2",
-    titleNl: "Connect the dots (prototype)",
-    descriptionNl: "Verbind de punten in de juiste volgorde. (Nu: snelle demo)",
+    titleNl: "Connect the dots",
+    descriptionNl: "Klik start en stop wanneer je klaar bent. Minste fouten wint bij gelijke tijd.",
     kind: "connect",
   },
-  {
-    id: "as-3",
-    titleNl: "Hoe voelde je je vandaag?",
-    descriptionNl: "Kies een emotie en schrijf 1 zin. (Nu: mock opslag)",
-    kind: "reflection",
-  },
-];
-
-function storageKey(userId: string) {
-  return `bh_assignments_v1:${userId}`;
-}
+] as const;
 
 export function AssignmentsClient({ locale }: { locale: Locale }) {
-  const { user } = useSession();
-  const [done, setDone] = useState<Record<string, boolean>>({});
-  const [reflection, setReflection] = useState("");
-  const [mood, setMood] = useState<"blij" | "ok" | "moeilijk" | "">("");
+  const [busy, setBusy] = useState<string | null>(null);
+  const [startAt, setStartAt] = useState<Record<"memory" | "connect", number | null>>({
+    memory: null,
+    connect: null,
+  });
+  const [mistakes, setMistakes] = useState<Record<"memory" | "connect", number>>({
+    memory: 0,
+    connect: 0,
+  });
+  type LeaderboardEntry = { rank: number; initials: string; timeMs: number; mistakes: number };
+  const [leaderboards, setLeaderboards] = useState<Record<"memory" | "connect", LeaderboardEntry[]>>({
+    memory: [],
+    connect: [],
+  });
 
-  const key = useMemo(() => (user ? storageKey(user.id) : null), [user]);
-
-  useEffect(() => {
-    if (!key) return;
-    try {
-      const raw = window.localStorage.getItem(key);
-      if (!raw) return;
-      const parsed = JSON.parse(raw) as {
-        done?: Record<string, boolean>;
-        reflection?: string;
-        mood?: string;
-      };
-      setDone(parsed.done ?? {});
-      setReflection(parsed.reflection ?? "");
-      setMood((parsed.mood as any) ?? "");
-    } catch {
-      // ignore
-    }
-  }, [key]);
-
-  function persist(next: Partial<{ done: Record<string, boolean>; reflection: string; mood: string }>) {
-    if (!key) return;
-    try {
-      const merged = {
-        done,
-        reflection,
-        mood,
-        ...next,
-      };
-      window.localStorage.setItem(key, JSON.stringify(merged));
-    } catch {
-      // ignore
-    }
+  async function refreshLeaderboard(gameType: "memory" | "connect") {
+    const res = await fetch(`/api/games/leaderboard?gameType=${gameType}`, {
+      credentials: "include",
+    });
+    const data = await res.json();
+    setLeaderboards((prev) => ({ ...prev, [gameType]: data?.leaderboard ?? [] }));
   }
 
   return (
@@ -97,73 +62,83 @@ export function AssignmentsClient({ locale }: { locale: Locale }) {
           <CardDescription>{translate(locale, a.descriptionNl)}</CardDescription>
 
           <div className="mt-3 flex items-center gap-2">
-            <span
-              className={`rounded-full border px-2 py-1 text-xs font-semibold ${
-                done[a.id] ? "border-emerald-200 bg-emerald-50 text-emerald-700" : "border-zinc-200 bg-zinc-50 text-zinc-700"
-              }`}
-            >
-              {done[a.id] ? "Bewaard" : "Nog niet"}
+            <span className="text-xs text-zinc-500">
+              {translate(locale, "Per klas leaderboard (initialen)")}
             </span>
-            <span className="text-xs text-zinc-400">(mock)</span>
+            <button
+              type="button"
+              className="text-xs underline"
+              onClick={() => void refreshLeaderboard(a.kind)}
+            >
+              {translate(locale, "Vernieuwen")}
+            </button>
           </div>
 
-          {a.kind !== "reflection" ? (
-            <div className="mt-3">
+          <div className="mt-3 flex flex-col gap-2">
+            {startAt[a.kind] ? (
+              <Button
+                type="button"
+                disabled={busy === a.kind}
+                onClick={async () => {
+                  if (!startAt[a.kind]) return;
+                  setBusy(a.kind);
+                  const timeMs = Date.now() - startAt[a.kind]!;
+                  const res = await fetch("/api/games/score", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify({
+                      gameType: a.kind,
+                      timeMs,
+                      mistakes: mistakes[a.kind],
+                    }),
+                  });
+                  setBusy(null);
+                  if (res.ok) {
+                    setStartAt((prev) => ({ ...prev, [a.kind]: null }));
+                    setMistakes((prev) => ({ ...prev, [a.kind]: 0 }));
+                    await refreshLeaderboard(a.kind);
+                  }
+                }}
+              >
+                {translate(locale, "Stop & score opslaan")}
+              </Button>
+            ) : (
               <ButtonSecondary
                 type="button"
                 onClick={() => {
-                  const next = { ...done, [a.id]: true };
-                  setDone(next);
-                  persist({ done: next });
+                  setStartAt((prev) => ({ ...prev, [a.kind]: Date.now() }));
                 }}
               >
-                Markeer als gedaan
+                {translate(locale, "Start spel")}
               </ButtonSecondary>
-            </div>
-          ) : (
-            <div className="mt-3 flex flex-col gap-2">
-              <div className="grid grid-cols-3 gap-2">
-                {[
-                  { id: "blij", labelNl: "Blij" },
-                  { id: "ok", labelNl: "Oké" },
-                  { id: "moeilijk", labelNl: "Moeilijk" },
-                ].map((m) => (
-                  <button
-                    key={m.id}
-                    type="button"
-                    onClick={() => {
-                      setMood(m.id as any);
-                      persist({ mood: m.id });
-                    }}
-                    className={`h-12 rounded-2xl border text-sm font-semibold active:scale-[0.99] ${
-                      mood === (m.id as any)
-                        ? "border-zinc-900 bg-zinc-900 text-white"
-                        : "border-zinc-200 bg-white hover:bg-zinc-50"
-                    }`}
-                  >
-                    {translate(locale, m.labelNl)}
-                  </button>
-                ))}
-              </div>
-              <textarea
-                value={reflection}
-                onChange={(e) => setReflection(e.target.value)}
-                placeholder={translate(locale, "Schrijf 1 zin...")}
-                className="min-h-24 w-full rounded-2xl border border-zinc-200 bg-white p-3 text-sm shadow-sm outline-none focus:border-zinc-900"
-              />
-              <Button
+            )}
+            {startAt[a.kind] && (
+              <ButtonSecondary
                 type="button"
                 onClick={() => {
-                  persist({ reflection });
-                  const next = { ...done, [a.id]: true };
-                  setDone(next);
-                  persist({ done: next });
+                  setMistakes((prev) => ({ ...prev, [a.kind]: prev[a.kind] + 1 }));
                 }}
               >
-                Bewaar
-              </Button>
+                +1 {translate(locale, "fouten")} ({mistakes[a.kind]})
+              </ButtonSecondary>
+            )}
+            <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-2 text-xs">
+              {(leaderboards[a.kind] ?? []).length === 0 && (
+                <div>{translate(locale, "Nog geen scores.")}</div>
+              )}
+              {(leaderboards[a.kind] as LeaderboardEntry[]).map((row) => (
+                <div key={`${a.kind}-${row.rank}-${row.initials}`} className="flex justify-between">
+                  <span>
+                    #{row.rank} {row.initials}
+                  </span>
+                  <span>
+                    {Math.round(row.timeMs / 1000)}s • {translate(locale, "fouten")} {row.mistakes}
+                  </span>
+                </div>
+              ))}
             </div>
-          )}
+          </div>
         </Card>
       ))}
     </div>

@@ -35,9 +35,9 @@ export function TeacherComposeMock({ locale }: { locale: Locale }) {
 
   return (
     <Card>
-      <CardTitle>Bericht opmaken (demo)</CardTitle>
+      <CardTitle>{translate(locale, "Bericht opmaken (demo)")}</CardTitle>
       <CardDescription>
-        Mockup voor groepsbericht of bericht naar specifieke ouders/voogden.
+        {translate(locale, "Mockup voor groepsbericht of bericht naar specifieke ouders/voogden.")}
       </CardDescription>
 
       <div className="mt-3 grid grid-cols-2 gap-2">
@@ -50,7 +50,7 @@ export function TeacherComposeMock({ locale }: { locale: Locale }) {
               : "border-zinc-200 bg-white text-zinc-900 hover:bg-zinc-50"
           }`}
         >
-          Groepsbericht
+          {translate(locale, "Groepsbericht")}
         </button>
         <button
           type="button"
@@ -61,7 +61,7 @@ export function TeacherComposeMock({ locale }: { locale: Locale }) {
               : "border-zinc-200 bg-white text-zinc-900 hover:bg-zinc-50"
           }`}
         >
-          Specifieke ouder(s)
+          {translate(locale, "Specifieke ouder(s)")}
         </button>
       </div>
 
@@ -91,13 +91,13 @@ export function TeacherComposeMock({ locale }: { locale: Locale }) {
         <input
           value={context}
           onChange={(e) => setContext(e.target.value)}
-          placeholder="Context (optioneel): bv. Rekenen, Stage, Workshop"
+          placeholder={translate(locale, "Context (optioneel): bv. Rekenen, Stage, Workshop")}
           className="h-12 w-full rounded-2xl border border-zinc-200 bg-white px-3 text-sm outline-none focus:border-zinc-900"
         />
         <textarea
           value={body}
           onChange={(e) => setBody(e.target.value)}
-          placeholder="Schrijf je bericht..."
+          placeholder={translate(locale, "Schrijf je bericht...")}
           className="min-h-24 w-full rounded-2xl border border-zinc-200 bg-white p-3 text-sm outline-none focus:border-zinc-900"
         />
       </div>
@@ -108,7 +108,7 @@ export function TeacherComposeMock({ locale }: { locale: Locale }) {
           onClick={() => setSent(true)}
           disabled={mode === "specific" && recipients.length === 0}
         >
-          Verzenden (mock)
+          {translate(locale, "Verzenden (mock)")}
         </Button>
         <ButtonSecondary
           type="button"
@@ -120,31 +120,32 @@ export function TeacherComposeMock({ locale }: { locale: Locale }) {
             setMode("group");
           }}
         >
-          Reset
+          {translate(locale, "Reset")}
         </ButtonSecondary>
       </div>
 
       <div className="mt-4 rounded-2xl border border-zinc-200 bg-zinc-50 p-3">
-        <div className="text-xs font-semibold text-zinc-600">Preview</div>
+        <div className="text-xs font-semibold text-zinc-600">{translate(locale, "Preview")}</div>
         <div className="mt-2 text-sm text-zinc-700">
-          Aan:{" "}
+          {translate(locale, "Aan")}:{" "}
           {recipients.length > 0
             ? recipients.map((r) => r.name).join(", ")
-            : "geen ontvangers"}
+            : translate(locale, "geen ontvangers")}
         </div>
         {context && (
-          <div className="mt-1 text-sm text-zinc-700">Context: {context}</div>
+          <div className="mt-1 text-sm text-zinc-700">
+            {translate(locale, "Context")}: {context}
+          </div>
         )}
         <div className="mt-2 rounded-xl border border-zinc-200 bg-white p-2 text-sm leading-6 text-zinc-800">
-          {body || "Nog geen bericht."}
+          {body || translate(locale, "Nog geen bericht.")}
         </div>
         <div className="mt-2 text-xs text-zinc-500">
-          Auto-vertaling simulatie:{" "}
-          {body ? translate(locale, body) : "—"}
+          {translate(locale, "Auto-vertaling simulatie")}: {body ? translate(locale, body) : "—"}
         </div>
         {sent && (
           <div className="mt-2 text-xs font-semibold text-emerald-700">
-            Bericht opgeslagen als demo-item (geen echte verzending in MVP).
+            {translate(locale, "Bericht opgeslagen als demo-item (geen echte verzending in MVP).")}
           </div>
         )}
       </div>

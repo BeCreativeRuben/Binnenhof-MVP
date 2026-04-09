@@ -57,7 +57,7 @@ export function AgendaList({
                 ? t(locale, "nav.workshops")
                 : item.type === "student"
                   ? t(locale, "student.title")
-                  : "School"}
+                  : translate(locale, "School")}
             </span>
           </div>
         </Card>

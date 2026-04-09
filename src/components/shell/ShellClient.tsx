@@ -2,7 +2,17 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { ChevronLeft, Languages, LogOut } from "lucide-react";
+import {
+  Calendar,
+  ChevronLeft,
+  Languages,
+  LogOut,
+  MessageSquare,
+  Send,
+  Sparkles,
+  TentTree,
+  UserRound,
+} from "lucide-react";
 import type { ReactNode } from "react";
 import { LOCALE_LABELS, LOCALES, type Locale } from "@/lib/locales";
 import { t } from "@/lib/i18n";
@@ -47,34 +57,35 @@ export function ShellClient({
   const navItems =
     user?.role === "student"
       ? [
-          { href: `${roleBase}/`, label: t(locale, "nav.dashboard") },
-          { href: `${roleBase}/messages`, label: t(locale, "nav.messages") },
-          { href: `${roleBase}/agenda`, label: t(locale, "nav.agenda") },
-          { href: `${roleBase}/kieswijzer`, label: t(locale, "nav.kieswijzer") },
+          { href: `${roleBase}/`, label: t(locale, "nav.dashboard"), icon: UserRound },
+          { href: `${roleBase}/messages`, label: t(locale, "nav.messages"), icon: MessageSquare },
+          { href: `${roleBase}/agenda`, label: t(locale, "nav.agenda"), icon: Calendar },
+          { href: `${roleBase}/kieswijzer`, label: t(locale, "nav.kieswijzer"), icon: Send },
           {
             href: `${roleBase}/opdrachtjes`,
             label: t(locale, "nav.assignments"),
+            icon: Sparkles,
           },
         ]
       : user
         ? [
-            { href: `${roleBase}/`, label: t(locale, "nav.dashboard") },
-            { href: `${roleBase}/messages`, label: t(locale, "nav.messages") },
-            { href: `${roleBase}/agenda`, label: t(locale, "nav.agenda") },
-            { href: `${roleBase}/workshops`, label: t(locale, "nav.workshops") },
-            { href: `${roleBase}/kieswijzer`, label: t(locale, "nav.kieswijzer") },
+            { href: `${roleBase}/`, label: t(locale, "nav.dashboard"), icon: UserRound },
+            { href: `${roleBase}/messages`, label: t(locale, "nav.messages"), icon: MessageSquare },
+            { href: `${roleBase}/agenda`, label: t(locale, "nav.agenda"), icon: Calendar },
+            { href: `${roleBase}/workshops`, label: t(locale, "nav.workshops"), icon: TentTree },
+            { href: `${roleBase}/kieswijzer`, label: t(locale, "nav.kieswijzer"), icon: Send },
           ]
         : [];
 
   return (
-    <div className="min-h-dvh flex flex-col bg-zinc-50 text-zinc-950">
-      <header className="sticky top-0 z-40 border-b border-zinc-200/70 bg-white/80 backdrop-blur">
+    <div className="min-h-dvh flex flex-col bg-[#eff2f7] text-[#273247]">
+      <header className="sticky top-0 z-40 border-b border-[#cfd8e6] bg-white/90 backdrop-blur">
         <div className="mx-auto flex w-full max-w-md items-center gap-2 px-4 py-3">
           {showNav && (
             <button
               type="button"
               onClick={() => (backHref ? router.push(backHref) : router.back())}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-zinc-200 bg-white shadow-sm active:scale-[0.98]"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#d2dbea] bg-white shadow-[0_2px_8px_rgba(31,52,88,0.1)] active:scale-[0.98]"
               aria-label={t(locale, "common.back")}
             >
               <ChevronLeft className="h-5 w-5" />
@@ -99,7 +110,7 @@ export function ShellClient({
 
           <details className="relative">
             <summary className="list-none">
-              <span className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-zinc-200 bg-white shadow-sm active:scale-[0.98]">
+              <span className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[#d2dbea] bg-white shadow-[0_2px_8px_rgba(31,52,88,0.1)] active:scale-[0.98]">
                 <Languages className="h-5 w-5" />
               </span>
             </summary>
@@ -128,11 +139,11 @@ export function ShellClient({
           {user && (
             <button
               type="button"
-              onClick={() => {
-                logout();
+              onClick={async () => {
+                await logout();
                 router.push(`/${locale}/login`);
               }}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-zinc-200 bg-white shadow-sm active:scale-[0.98]"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#d2dbea] bg-white shadow-[0_2px_8px_rgba(31,52,88,0.1)] active:scale-[0.98]"
               aria-label={t(locale, "common.logout")}
             >
               <LogOut className="h-5 w-5" />
@@ -144,21 +155,25 @@ export function ShellClient({
       <main className="mx-auto w-full max-w-md flex-1 px-4 py-4">{children}</main>
 
       {showNav && user && (
-        <nav className="sticky bottom-0 z-40 border-t border-zinc-200/70 bg-white/90 backdrop-blur">
+        <nav className="sticky bottom-0 z-40 border-t border-[#cfd8e6] bg-white/95 backdrop-blur">
           <div className="mx-auto grid w-full max-w-md grid-cols-5 gap-1 px-2 py-2">
             {navItems.map((item) => {
               const active =
                 pathname === item.href ||
                 (item.href.endsWith("/") && pathname === item.href.slice(0, -1)) ||
                 pathname?.startsWith(item.href + "/");
+              const Icon = item.icon;
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex h-11 items-center justify-center rounded-xl px-2 text-center text-[12px] font-medium ${
-                    active ? "bg-zinc-900 text-white" : "text-zinc-700 hover:bg-zinc-50"
+                  className={`flex h-14 flex-col items-center justify-center rounded-2xl px-1 text-center text-[11px] font-semibold ${
+                    active
+                      ? "bg-[#4a90e2] text-white shadow-[0_4px_12px_rgba(74,144,226,0.35)]"
+                      : "text-[#4f5f7d] hover:bg-[#f1f5fb]"
                   }`}
                 >
+                  <Icon className="mb-1 h-4 w-4" />
                   {item.label}
                 </Link>
               );

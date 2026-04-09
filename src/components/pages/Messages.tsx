@@ -31,7 +31,7 @@ export function MessagesList({
           {t(locale, "messages.title")}
         </h1>
         <p className="mt-2 text-sm text-zinc-600">
-          1-op-1, groepsberichten en mededelingen (mock data).
+          {translate(locale, "1-op-1, groepsberichten en mededelingen (mock data).")}
         </p>
       </div>
 
@@ -100,7 +100,7 @@ export function MessagesThread({
             <div className="mt-4 border-t border-zinc-100 pt-3 text-sm text-zinc-600">
               {t(locale, "messages.reply")}:{" "}
               <span className="text-zinc-400">
-                (MVP: geen echte communicatie)
+                {translate(locale, "(MVP: geen echte communicatie)")}
               </span>
             </div>
           </Card>
