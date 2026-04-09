@@ -20,6 +20,7 @@ export type MessageThread = {
   messages: ThreadMessage[];
   isAnnouncement?: boolean;
   group?: boolean;
+  visibleTo: Array<"parent" | "teacher" | "student">;
 };
 
 export const MOCK_THREADS: MessageThread[] = [
@@ -28,6 +29,7 @@ export const MOCK_THREADS: MessageThread[] = [
     titleNl: "Dagelijkse update - Noah",
     participantsNl: "Mevr. De Smet ↔ Ouder",
     lastActivityAt: "2026-04-01T16:10:00.000Z",
+    visibleTo: ["parent", "teacher"],
     messages: [
       {
         id: "m-1",
@@ -53,6 +55,7 @@ export const MOCK_THREADS: MessageThread[] = [
     lastActivityAt: "2026-03-28T10:00:00.000Z",
     isAnnouncement: true,
     group: true,
+    visibleTo: ["parent", "teacher"],
     messages: [
       {
         id: "m-3",
@@ -70,6 +73,7 @@ export const MOCK_THREADS: MessageThread[] = [
     participantsNl: "Leerkracht → ouders",
     lastActivityAt: "2026-03-25T19:05:00.000Z",
     group: true,
+    visibleTo: ["parent", "teacher"],
     messages: [
       {
         id: "m-4",
@@ -81,5 +85,31 @@ export const MOCK_THREADS: MessageThread[] = [
       },
     ],
   },
+  {
+    id: "thr-4",
+    titleNl: "Feedback op je oefening - Noah",
+    participantsNl: "Mevr. De Smet ↔ Leerling",
+    lastActivityAt: "2026-04-02T14:10:00.000Z",
+    visibleTo: ["student", "teacher"],
+    messages: [
+      {
+        id: "m-5",
+        fromName: "Mevr. De Smet",
+        createdAt: "2026-04-02T14:05:00.000Z",
+        bodyNl: "Sterk gewerkt vandaag. Je hield goed tempo en je werkte netjes af.",
+        context: { label: "Klas", when: "Vandaag", studentName: "Noah" },
+      },
+      {
+        id: "m-6",
+        fromName: "Noah",
+        createdAt: "2026-04-02T14:10:00.000Z",
+        bodyNl: "Dankjewel, ik ga dit morgen opnieuw proberen.",
+      },
+    ],
+  },
 ];
+
+export function getThreadsForRole(role: "parent" | "teacher" | "student") {
+  return MOCK_THREADS.filter((thread) => thread.visibleTo.includes(role));
+}
 

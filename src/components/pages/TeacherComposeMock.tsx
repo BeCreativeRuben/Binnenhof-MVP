@@ -34,7 +34,7 @@ export function TeacherComposeMock({ locale }: { locale: Locale }) {
   }
 
   return (
-    <Card>
+    <Card className="bg-[#f8fbff]">
       <CardTitle>{translate(locale, "Bericht opmaken (demo)")}</CardTitle>
       <CardDescription>
         {translate(locale, "Mockup voor groepsbericht of bericht naar specifieke ouders/voogden.")}
@@ -46,8 +46,8 @@ export function TeacherComposeMock({ locale }: { locale: Locale }) {
           onClick={() => setMode("group")}
           className={`h-12 rounded-2xl border px-3 text-sm font-semibold ${
             mode === "group"
-              ? "border-zinc-900 bg-zinc-900 text-white"
-              : "border-zinc-200 bg-white text-zinc-900 hover:bg-zinc-50"
+              ? "border-blue-500 bg-blue-500 text-white"
+              : "border-[#d6deea] bg-white text-zinc-900 hover:bg-[#f8fbff]"
           }`}
         >
           {translate(locale, "Groepsbericht")}
@@ -57,8 +57,8 @@ export function TeacherComposeMock({ locale }: { locale: Locale }) {
           onClick={() => setMode("specific")}
           className={`h-12 rounded-2xl border px-3 text-sm font-semibold ${
             mode === "specific"
-              ? "border-zinc-900 bg-zinc-900 text-white"
-              : "border-zinc-200 bg-white text-zinc-900 hover:bg-zinc-50"
+              ? "border-blue-500 bg-blue-500 text-white"
+              : "border-[#d6deea] bg-white text-zinc-900 hover:bg-[#f8fbff]"
           }`}
         >
           {translate(locale, "Specifieke ouder(s)")}
@@ -74,8 +74,8 @@ export function TeacherComposeMock({ locale }: { locale: Locale }) {
               onClick={() => toggleParent(p.id)}
               className={`flex min-h-12 items-center justify-between rounded-2xl border px-3 text-left text-sm font-semibold ${
                 selectedParentIds.includes(p.id)
-                  ? "border-zinc-900 bg-zinc-50"
-                  : "border-zinc-200 bg-white hover:bg-zinc-50"
+                  ? "border-blue-500 bg-blue-50"
+                  : "border-[#d6deea] bg-white hover:bg-[#f8fbff]"
               }`}
             >
               <span>{p.name}</span>
@@ -92,13 +92,13 @@ export function TeacherComposeMock({ locale }: { locale: Locale }) {
           value={context}
           onChange={(e) => setContext(e.target.value)}
           placeholder={translate(locale, "Context (optioneel): bv. Rekenen, Stage, Workshop")}
-          className="h-12 w-full rounded-2xl border border-zinc-200 bg-white px-3 text-sm outline-none focus:border-zinc-900"
+          className="h-12 w-full rounded-2xl border border-[#d6deea] bg-white px-3 text-sm outline-none focus:border-blue-500"
         />
         <textarea
           value={body}
           onChange={(e) => setBody(e.target.value)}
           placeholder={translate(locale, "Schrijf je bericht...")}
-          className="min-h-24 w-full rounded-2xl border border-zinc-200 bg-white p-3 text-sm outline-none focus:border-zinc-900"
+          className="min-h-24 w-full rounded-2xl border border-[#d6deea] bg-white p-3 text-sm outline-none focus:border-blue-500"
         />
       </div>
 
@@ -124,7 +124,7 @@ export function TeacherComposeMock({ locale }: { locale: Locale }) {
         </ButtonSecondary>
       </div>
 
-      <div className="mt-4 rounded-2xl border border-zinc-200 bg-zinc-50 p-3">
+      <div className="mt-4 rounded-2xl border border-[#d6deea] bg-white p-3">
         <div className="text-xs font-semibold text-zinc-600">{translate(locale, "Preview")}</div>
         <div className="mt-2 text-sm text-zinc-700">
           {translate(locale, "Aan")}:{" "}

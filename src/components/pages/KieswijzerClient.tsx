@@ -136,15 +136,15 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
   }
 
   return (
-    <div className="flex flex-col gap-3 pb-6">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">
+    <div className="flex flex-col gap-4 pb-6">
+      <Card className="overflow-hidden border-0 bg-gradient-to-r from-[#4c8eed] to-[#2c66ea] text-white shadow-[0_12px_28px_rgba(44,102,234,0.35)]">
+        <h1 className="text-2xl font-bold tracking-tight text-white">
           {t(locale, "kieswijzer.title")}
         </h1>
-        <p className="mt-2 text-sm text-zinc-600">{t(locale, "kieswijzer.subtitle")}</p>
-      </div>
+        <p className="mt-2 text-sm text-blue-100">{t(locale, "kieswijzer.subtitle")}</p>
+      </Card>
 
-      <Card>
+      <Card className="bg-[#f8fbff]">
         <CardDescription>
           <button
             type="button"
@@ -166,7 +166,7 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
       </Card>
 
       {context?.role === "parent" && (
-        <Card>
+        <Card className="bg-[#f8fbff]">
           <CardTitle>{translate(locale, "Kind selecteren")}</CardTitle>
           <div className="mt-3 flex flex-col gap-2">
             {context.children?.map((c) => (
@@ -189,7 +189,7 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
       )}
 
       {context?.role === "teacher" && (
-        <Card>
+        <Card className="bg-[#f8fbff]">
           <CardTitle>{translate(locale, "Leerkracht modus")}</CardTitle>
           <div className="mt-3 grid grid-cols-2 gap-2">
             <button
@@ -217,7 +217,7 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
       )}
 
       {context?.role === "teacher" && (
-        <Card>
+        <Card className="bg-[#f8fbff]">
           <CardTitle>{translate(locale, "Leerling selecteren")}</CardTitle>
           <div className="mt-3 flex flex-col gap-2">
             {context.students?.map((s) => (
@@ -241,7 +241,7 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
       )}
 
       {teacherMode === "overview" && context?.role === "teacher" ? (
-        <Card>
+        <Card className="bg-[#f8fbff]">
           <CardTitle>{translate(locale, "Overzicht leerkracht")}</CardTitle>
           <CardDescription>
             {translate(locale, "Bekijk per partij de input en vergelijk gemiddelde verschillen.")}
@@ -305,7 +305,7 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
         </Card>
       ) : (
         <>
-      <Card>
+      <Card className="bg-[#f8fbff]">
         <CardTitle>{translate(locale, "Technieken")}</CardTitle>
         <CardDescription>{translate(locale, "Kies wat je graag doet.")}</CardDescription>
         <div className="mt-3 flex flex-wrap gap-2">
@@ -334,7 +334,7 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
         </div>
       </Card>
 
-      <Card>
+      <Card className="bg-[#f8fbff]">
         <CardTitle>{translate(locale, "Talenten")}</CardTitle>
         <CardDescription>{translate(locale, "Kies wat je goed kan.")}</CardDescription>
         <div className="mt-3 flex flex-wrap gap-2">
@@ -413,7 +413,7 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
       </Card>
 
       {submitted && (
-        <Card>
+        <Card className="bg-[#f8fbff]">
           <CardTitle>{t(locale, "kieswijzer.results")}</CardTitle>
           <CardDescription>
             {translate(locale, "Score op basis van je keuzes. Resultaat wordt pas na definitieve submit getoond.")}

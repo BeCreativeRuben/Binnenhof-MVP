@@ -19,12 +19,12 @@ export function LoginClient({ locale }: { locale: Locale }) {
 
   return (
     <div className="flex flex-col gap-4 pb-4">
-      <div className="pt-1">
-        <h1 className="text-2xl font-semibold tracking-tight">
+      <Card className="overflow-hidden border-0 bg-gradient-to-r from-[#4c8eed] to-[#2c66ea] text-white shadow-[0_12px_28px_rgba(44,102,234,0.35)]">
+        <h1 className="text-2xl font-bold tracking-tight text-white">
           {t(locale, "login.title")}
         </h1>
-        <p className="mt-2 text-sm text-zinc-600">{t(locale, "login.subtitle")}</p>
-      </div>
+        <p className="mt-2 text-sm text-blue-100">{t(locale, "login.subtitle")}</p>
+      </Card>
 
       <Card>
         <CardTitle>{t(locale, "login.language")}</CardTitle>
@@ -39,8 +39,8 @@ export function LoginClient({ locale }: { locale: Locale }) {
               onClick={() => router.push(`/${l}/login`)}
               className={`h-12 rounded-2xl border px-3 text-left text-sm font-semibold active:scale-[0.99] ${
                 l === locale
-                  ? "border-zinc-900 bg-zinc-50"
-                  : "border-zinc-200 bg-white hover:bg-zinc-50"
+                  ? "border-blue-500 bg-blue-50"
+                  : "border-[#d6deea] bg-white hover:bg-[#f8fbff]"
               }`}
             >
               {LOCALE_LABELS[l]}
@@ -57,14 +57,14 @@ export function LoginClient({ locale }: { locale: Locale }) {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             placeholder={translate(locale, "Gebruikersnaam")}
-            className="h-12 rounded-2xl border border-zinc-200 bg-white px-3 text-sm outline-none focus:border-zinc-900"
+            className="h-12 rounded-2xl border border-[#d6deea] bg-white px-3 text-sm outline-none focus:border-blue-500"
           />
           <input
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder={translate(locale, "Wachtwoord")}
             type="password"
-            className="h-12 rounded-2xl border border-zinc-200 bg-white px-3 text-sm outline-none focus:border-zinc-900"
+            className="h-12 rounded-2xl border border-[#d6deea] bg-white px-3 text-sm outline-none focus:border-blue-500"
           />
         </div>
       </Card>

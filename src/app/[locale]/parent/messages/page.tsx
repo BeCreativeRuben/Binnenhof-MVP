@@ -1,6 +1,6 @@
 import type { Locale } from "@/lib/locales";
 import { RequireRole } from "@/components/session/RequireRole";
-import { MOCK_THREADS } from "@/lib/mock/messages";
+import { getThreadsForRole } from "@/lib/mock/messages";
 import { MessagesList } from "@/components/pages/Messages";
 
 export default async function ParentMessages({
@@ -10,10 +10,11 @@ export default async function ParentMessages({
 }) {
   const { locale } = await params;
   const basePath = `/${locale}/parent`;
+  const parentThreads = getThreadsForRole("parent");
   return (
     <div className="flex flex-col gap-4">
       <RequireRole locale={locale} role="parent" />
-      <MessagesList locale={locale} basePath={basePath} threads={MOCK_THREADS} />
+      <MessagesList locale={locale} basePath={basePath} threads={parentThreads} />
     </div>
   );
 }

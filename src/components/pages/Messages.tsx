@@ -25,27 +25,27 @@ export function MessagesList({
   threads: MessageThread[];
 }) {
   return (
-    <div className="flex flex-col gap-3">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">
+    <div className="flex flex-col gap-4">
+      <Card className="overflow-hidden border-0 bg-gradient-to-r from-[#4c8eed] to-[#2c66ea] text-white shadow-[0_12px_28px_rgba(44,102,234,0.35)]">
+        <h1 className="text-2xl font-bold tracking-tight text-white">
           {t(locale, "messages.title")}
         </h1>
-        <p className="mt-2 text-sm text-zinc-600">
+        <p className="mt-2 text-sm text-blue-100">
           {translate(locale, "1-op-1, groepsberichten en mededelingen (mock data).")}
         </p>
-      </div>
+      </Card>
 
       {threads.map((thr) => (
         <Link key={thr.id} href={`${basePath}/messages/${thr.id}`}>
-          <Card className="hover:bg-zinc-50">
+          <Card className="hover:bg-[#f8fbff]">
             <CardTitle>{translate(locale, thr.titleNl)}</CardTitle>
             <CardDescription>{translate(locale, thr.participantsNl)}</CardDescription>
             <div className="mt-3 line-clamp-2 text-sm text-zinc-700">
               {translate(locale, thr.messages.at(-1)?.bodyNl ?? "")}
             </div>
             {thr.messages.at(-1)?.context?.label && (
-              <div className="mt-3 inline-flex items-center gap-2 text-xs font-medium text-zinc-600">
-                <span className="rounded-full border border-zinc-200 bg-white px-2 py-1">
+              <div className="mt-3 inline-flex items-center gap-2 text-xs font-medium text-[#5f6c84]">
+                <span className="rounded-full border border-[#d6deea] bg-[#f6f9ff] px-2 py-1">
                   {t(locale, "messages.context")}:{" "}
                   {translate(locale, thr.messages.at(-1)?.context?.label ?? "")}
                 </span>
@@ -69,15 +69,15 @@ export function MessagesThread({
   thread: MessageThread;
 }) {
   return (
-    <div className="flex flex-col gap-3 pb-6">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">
+    <div className="flex flex-col gap-4 pb-6">
+      <Card className="overflow-hidden border-0 bg-gradient-to-r from-[#4c8eed] to-[#2c66ea] text-white shadow-[0_12px_28px_rgba(44,102,234,0.35)]">
+        <h1 className="text-2xl font-bold tracking-tight text-white">
           {translate(locale, thread.titleNl)}
         </h1>
-        <p className="mt-2 text-sm text-zinc-600">
+        <p className="mt-2 text-sm text-blue-100">
           {translate(locale, thread.participantsNl)}
         </p>
-      </div>
+      </Card>
 
       <div className="flex flex-col gap-2">
         {thread.messages.map((m) => (
@@ -88,7 +88,7 @@ export function MessagesThread({
             </CardDescription>
             {m.context?.label && (
               <div className="mt-3 text-xs font-medium text-zinc-600">
-                <span className="rounded-full border border-zinc-200 bg-zinc-50 px-2 py-1">
+                <span className="rounded-full border border-[#d6deea] bg-[#f6f9ff] px-2 py-1">
                   {t(locale, "messages.context")}: {translate(locale, m.context.label)}
                 </span>
                 <span className="ml-2 text-zinc-400">{t(locale, "common.optional")}</span>
@@ -107,11 +107,8 @@ export function MessagesThread({
         ))}
       </div>
 
-      <Link
-        href={`${basePath}/messages`}
-        className="inline-flex h-12 w-full items-center justify-center rounded-2xl border border-zinc-200 bg-white text-[15px] font-semibold text-zinc-900 shadow-sm active:scale-[0.99]"
-      >
-        {t(locale, "messages.title")}
+      <Link href={`${basePath}/messages`} className="inline-flex h-12 w-full items-center justify-center rounded-2xl bg-[#2f4a78] text-[15px] font-semibold text-white shadow-[0_4px_12px_rgba(47,74,120,0.35)] active:scale-[0.99]">
+        {translate(locale, "Terug naar berichten")}
       </Link>
     </div>
   );

@@ -1,6 +1,6 @@
 import type { Locale } from "@/lib/locales";
 import { RequireRole } from "@/components/session/RequireRole";
-import { MOCK_THREADS } from "@/lib/mock/messages";
+import { getThreadsForRole } from "@/lib/mock/messages";
 import { MessagesThread } from "@/components/pages/Messages";
 
 export default async function StudentThread({
@@ -10,7 +10,8 @@ export default async function StudentThread({
 }) {
   const { locale, threadId } = await params;
   const basePath = `/${locale}/student`;
-  const thread = MOCK_THREADS.find((t) => t.id === threadId) ?? MOCK_THREADS[0];
+  const studentThreads = getThreadsForRole("student");
+  const thread = studentThreads.find((t) => t.id === threadId) ?? studentThreads[0];
 
   return (
     <div className="flex flex-col gap-4">

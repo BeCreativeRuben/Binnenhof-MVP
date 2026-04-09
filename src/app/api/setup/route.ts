@@ -4,6 +4,12 @@ import { createPasswordHash } from "@/lib/auth";
 import { ensureSchema, getSql } from "@/lib/db";
 
 export async function POST() {
+  if (process.env.NODE_ENV === "production") {
+    return NextResponse.json(
+      { ok: false, message: "Setup endpoint is disabled in production." },
+      { status: 403 },
+    );
+  }
   try {
     await ensureSchema();
     const sql = getSql();

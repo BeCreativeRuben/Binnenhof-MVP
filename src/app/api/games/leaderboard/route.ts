@@ -4,11 +4,18 @@ import { getSessionUserFromRequest } from "@/lib/auth";
 import { ensureSchema, getSql } from "@/lib/db";
 
 function toInitials(name: string) {
-  const clean = name.replace(/[^a-zA-Z ]/g, "").trim();
+  const clean = name.replace(/[^a-zA-Z ]/g, " ").trim();
   if (!clean) return "AAA";
   const parts = clean.split(/\s+/).filter(Boolean);
-  const letters = parts.map((p) => p[0]?.toUpperCase() ?? "").join("");
-  return (letters + "XXX").slice(0, 3);
+  let letters = parts.map((p) => p[0]?.toUpperCase() ?? "").join("");
+  const flat = clean.replace(/\s+/g, "").toUpperCase();
+  for (const ch of flat) {
+    if (letters.length >= 3) break;
+    if (!letters.includes(ch) || letters.length < 2) {
+      letters += ch;
+    }
+  }
+  return (letters + "AAA").slice(0, 3);
 }
 
 export async function GET(req: NextRequest) {
@@ -39,16 +46,18 @@ export async function GET(req: NextRequest) {
 
   const sql = getSql();
   const rows = (await sql`
-    SELECT 
-      g.student_user_id,
-      u.full_name,
-      MIN(g.time_ms) AS best_time_ms,
-      MIN(g.mistakes) AS best_mistakes
-    FROM game_scores g
-    INNER JOIN app_users u ON u.id = g.student_user_id
-    WHERE g.class_id = ${classId} AND g.game_type = ${gameType}
-    GROUP BY g.student_user_id, u.full_name
-    ORDER BY MIN(g.time_ms) ASC, MIN(g.mistakes) ASC
+    SELECT * FROM (
+      SELECT DISTINCT ON (g.student_user_id)
+        g.student_user_id,
+        u.full_name,
+        g.time_ms AS best_time_ms,
+        g.mistakes AS best_mistakes
+      FROM game_scores g
+      INNER JOIN app_users u ON u.id = g.student_user_id
+      WHERE g.class_id = ${classId} AND g.game_type = ${gameType}
+      ORDER BY g.student_user_id, g.time_ms ASC, g.mistakes ASC, g.created_at ASC
+    ) best
+    ORDER BY best.best_time_ms ASC, best.best_mistakes ASC
     LIMIT 20
   `) as { student_user_id: string; full_name: string; best_time_ms: number; best_mistakes: number }[];
 

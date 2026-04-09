@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import type { NextRequest } from "next/server";
 import bcrypt from "bcryptjs";
-import { getSql } from "@/lib/db";
+import { ensureSchema, getSql } from "@/lib/db";
 
 const SESSION_COOKIE = "bh_session_token";
 
@@ -41,9 +41,9 @@ export async function deleteSession(token: string) {
   await sql`DELETE FROM auth_sessions WHERE token = ${token}`;
 }
 
-export async function getSessionUserFromRequest(req: NextRequest) {
-  const token = req.cookies.get(SESSION_COOKIE)?.value;
+export async function getSessionUserByToken(token: string | null | undefined) {
   if (!token) return null;
+  await ensureSchema();
   const sql = getSql();
   const rows = (await sql`
     SELECT u.id, u.username, u.full_name, u.role, u.class_id, u.teacher_user_id
@@ -53,4 +53,9 @@ export async function getSessionUserFromRequest(req: NextRequest) {
     LIMIT 1
   `) as DbUser[];
   return rows[0] ?? null;
+}
+
+export async function getSessionUserFromRequest(req: NextRequest) {
+  const token = req.cookies.get(SESSION_COOKIE)?.value;
+  return getSessionUserByToken(token);
 }

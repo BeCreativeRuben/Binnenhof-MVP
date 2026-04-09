@@ -32,15 +32,15 @@ export function WorkshopsPage({
     : `${translate(locale, "Beste ouder/voogd")},\n\n...`;
 
   return (
-    <div className="flex flex-col gap-3">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">
+    <div className="flex flex-col gap-4">
+      <Card className="overflow-hidden border-0 bg-gradient-to-r from-[#4c8eed] to-[#2c66ea] text-white shadow-[0_12px_28px_rgba(44,102,234,0.35)]">
+        <h1 className="text-2xl font-bold tracking-tight text-white">
           {t(locale, "workshops.title")}
         </h1>
-        <p className="mt-2 text-sm text-zinc-600">
+        <p className="mt-2 text-sm text-blue-100">
           {translate(locale, "Overzicht + e-mail preview (prototype).")}
         </p>
-      </div>
+      </Card>
 
       {workshops.map((w) => (
         <Card key={w.id}>
@@ -54,13 +54,13 @@ export function WorkshopsPage({
         </Card>
       ))}
 
-      <Card>
+      <Card className="bg-[#f8fbff]">
         <CardTitle>{t(locale, "workshops.emailPreview")}</CardTitle>
         <CardDescription>
           {translate(locale, "Automatisch vertaald voor deze taal (MVP zonder externe service).")}
         </CardDescription>
 
-        <div className="mt-3 rounded-2xl border border-zinc-200 bg-zinc-50 p-3 text-sm">
+        <div className="mt-3 rounded-2xl border border-[#d6deea] bg-white p-3 text-sm">
           <div className="flex flex-col gap-2">
             <div>
               <div className="text-xs font-semibold text-zinc-600">{translate(locale, "Aan")}</div>
