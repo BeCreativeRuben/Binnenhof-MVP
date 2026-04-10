@@ -123,7 +123,7 @@ export function ShellClient({
                   <button
                     key={l}
                     type="button"
-                    onClick={() => router.push(replaceLocale(pathname ?? `/${locale}/login`, l))}
+                    onClick={() => router.replace(replaceLocale(pathname ?? `/${locale}/login`, l))}
                     className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-sm hover:bg-zinc-50 ${
                       l === locale ? "bg-zinc-50 font-semibold" : ""
                     }`}

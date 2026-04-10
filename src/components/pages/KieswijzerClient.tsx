@@ -37,7 +37,6 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
   const [comment, setComment] = useState("");
   const [studentId, setStudentId] = useState<string>("");
   const [context, setContext] = useState<ContextData>(null);
-  const [doneRoles, setDoneRoles] = useState<string[]>([]);
   const [submitted, setSubmitted] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [overview, setOverview] = useState<OverviewData>(null);
@@ -72,8 +71,7 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
     const res = await fetch(`/api/kieswijzer/submission?studentId=${selectedStudentId}`, {
       credentials: "include",
     });
-    const data = await res.json();
-    setDoneRoles(data.doneRoles ?? []);
+    await res.json();
   }
 
   async function refreshOverview(selectedStudentId: string) {
@@ -85,7 +83,6 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
     setOverview(data?.ok ? data : null);
   }
 
-  const alreadySubmitted = Boolean(role && doneRoles.includes(role));
   const effectiveStudentId = studentId || (role === "student" ? user?.id ?? "" : "");
 
   function exportOverviewPdf() {
@@ -377,7 +374,7 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
         <div className="mt-3">
           <Button
             type="button"
-            disabled={busy || alreadySubmitted || selected.length === 0 || !effectiveStudentId}
+            disabled={busy || selected.length === 0 || !effectiveStudentId}
             onClick={async () => {
               setBusy(true);
               setMessage(null);
@@ -403,11 +400,6 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
           >
             {translate(locale, "Definitief indienen")}
           </Button>
-          {alreadySubmitted && (
-            <p className="mt-2 text-xs text-zinc-600">
-              {translate(locale, "Voor deze rol is de kieswijzer al ingediend. Aanpassen is niet mogelijk.")}
-            </p>
-          )}
           {message && <p className="mt-2 text-xs text-zinc-600">{message}</p>}
         </div>
       </Card>

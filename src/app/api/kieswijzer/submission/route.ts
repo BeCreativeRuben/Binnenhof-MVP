@@ -73,17 +73,21 @@ export async function POST(req: NextRequest) {
     WHERE student_user_id = ${payload.studentId} AND submitted_role = ${user.role}
     LIMIT 1
   `) as { id: string }[];
-  if (existing[0]) {
-    return NextResponse.json(
-      { ok: false, message: "This choice guide has already been submitted for this role." },
-      { status: 409 },
-    );
-  }
 
-  await sql`
-    INSERT INTO kieswijzer_submissions (id, student_user_id, submitted_by_user_id, submitted_role, selected_item_ids, comment)
-    VALUES (${randomUUID()}, ${payload.studentId}, ${user.id}, ${user.role}, ${JSON.stringify(payload.selectedItemIds)}, ${payload.comment ?? null})
-  `;
+  if (existing[0]) {
+    await sql`
+      UPDATE kieswijzer_submissions
+      SET submitted_by_user_id = ${user.id},
+          selected_item_ids = ${JSON.stringify(payload.selectedItemIds)},
+          comment = ${payload.comment ?? null}
+      WHERE id = ${existing[0].id}
+    `;
+  } else {
+    await sql`
+      INSERT INTO kieswijzer_submissions (id, student_user_id, submitted_by_user_id, submitted_role, selected_item_ids, comment)
+      VALUES (${randomUUID()}, ${payload.studentId}, ${user.id}, ${user.role}, ${JSON.stringify(payload.selectedItemIds)}, ${payload.comment ?? null})
+    `;
+  }
 
   return NextResponse.json({ ok: true });
 }
