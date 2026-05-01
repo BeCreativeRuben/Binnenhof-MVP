@@ -115,6 +115,18 @@ export function LoginClient({ locale }: { locale: Locale }) {
         </ButtonSecondary>
         {message && <p className="text-sm text-zinc-600">{message}</p>}
       </div>
+
+      <p className="mt-10 text-center text-[11px] text-zinc-500">
+        Made by{" "}
+        <a
+          href="https://studiothielman.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-medium text-zinc-600 underline underline-offset-[3px] transition hover:text-[#355a9a]"
+        >
+          Studio Thielman
+        </a>
+      </p>
     </div>
   );
 }
