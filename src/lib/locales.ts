@@ -14,6 +14,17 @@ export const LOCALE_LABELS: Record<Locale, string> = {
   sk: "Slovenčina",
 };
 
+/** Vlag per taal (emoji) voor taalkiezers */
+export const LOCALE_FLAGS: Record<Locale, string> = {
+  nl: "🇳🇱",
+  en: "🇬🇧",
+  tr: "🇹🇷",
+  bg: "🇧🇬",
+  ps: "🇦🇫",
+  fa: "🇦🇫",
+  sk: "🇸🇰",
+};
+
 export function isLocale(input: string): input is Locale {
   return (LOCALES as readonly string[]).includes(input);
 }

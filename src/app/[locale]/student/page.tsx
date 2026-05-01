@@ -4,6 +4,7 @@ import type { Locale } from "@/lib/locales";
 import { t, translate } from "@/lib/i18n";
 import { Card, CardDescription, CardTitle } from "@/components/ui/Card";
 import { RequireRole } from "@/components/session/RequireRole";
+import { cn, interactiveHoverClasses } from "@/components/ui/ui";
 
 export default async function StudentDashboard({
   params,
@@ -30,7 +31,10 @@ export default async function StudentDashboard({
         <div className="mt-3 grid grid-cols-2 gap-3">
           <Link
             href={`/${locale}/student/kieswijzer`}
-            className="rounded-[22px] border border-[#d6deea] bg-white p-4 shadow-[0_4px_14px_rgba(31,52,88,0.08)]"
+            className={cn(
+              interactiveHoverClasses,
+              "rounded-[22px] border border-[#d6deea] bg-white p-4 shadow-[0_4px_14px_rgba(31,52,88,0.08)] hover:border-[#c8d7ea]",
+            )}
           >
             <div className="flex items-center gap-3">
               <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[#f97316] text-white">
@@ -44,7 +48,10 @@ export default async function StudentDashboard({
           </Link>
           <Link
             href={`/${locale}/student/opdrachtjes`}
-            className="rounded-[22px] border border-[#d6deea] bg-white p-4 shadow-[0_4px_14px_rgba(31,52,88,0.08)]"
+            className={cn(
+              interactiveHoverClasses,
+              "rounded-[22px] border border-[#d6deea] bg-white p-4 shadow-[0_4px_14px_rgba(31,52,88,0.08)] hover:border-[#c8d7ea]",
+            )}
           >
             <div className="flex items-center gap-3">
               <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[#8b5cf6] text-white">
@@ -58,7 +65,10 @@ export default async function StudentDashboard({
           </Link>
           <Link
             href={`/${locale}/student/messages`}
-            className="rounded-[22px] border border-[#d6deea] bg-white p-4 shadow-[0_4px_14px_rgba(31,52,88,0.08)]"
+            className={cn(
+              interactiveHoverClasses,
+              "rounded-[22px] border border-[#d6deea] bg-white p-4 shadow-[0_4px_14px_rgba(31,52,88,0.08)] hover:border-[#c8d7ea]",
+            )}
           >
             <div className="flex items-center gap-3">
               <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[#4a90e2] text-white">
@@ -72,7 +82,10 @@ export default async function StudentDashboard({
           </Link>
           <Link
             href={`/${locale}/student/agenda`}
-            className="rounded-[22px] border border-[#d6deea] bg-white p-4 shadow-[0_4px_14px_rgba(31,52,88,0.08)]"
+            className={cn(
+              interactiveHoverClasses,
+              "rounded-[22px] border border-[#d6deea] bg-white p-4 shadow-[0_4px_14px_rgba(31,52,88,0.08)] hover:border-[#c8d7ea]",
+            )}
           >
             <div className="flex items-center gap-3">
               <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[#22c55e] text-white">

@@ -4,12 +4,24 @@ export type MessageContext = {
   studentName?: string;
 };
 
+/** Gestructureerde brief in bericht-detail (bron: oudercontact-brief, ODT) */
+export type BriefBlock =
+  | { type: "h2"; textNl: string }
+  | { type: "p"; textNl: string }
+  | { type: "facts"; items: { labelNl: string; valueNl: string }[] }
+  | { type: "callout"; textNl: string }
+  | { type: "signature"; linesNl: string[] }
+  /** Standaard dichtgevouwen: extra blokken onder summary (bijv. papieren bijlage) */
+  | { type: "details"; summaryNl: string; children: BriefBlock[] };
+
 export type ThreadMessage = {
   id: string;
   fromName: string;
   bodyNl: string;
   createdAt: string; // ISO
   context?: MessageContext;
+  /** Als gezet: volledige brief als compacte blokken; `bodyNl` mag leeg of enkel teaser zijn */
+  briefBlocks?: BriefBlock[];
 };
 
 export type MessageThread = {
@@ -18,6 +30,8 @@ export type MessageThread = {
   participantsNl: string;
   lastActivityAt: string;
   messages: ThreadMessage[];
+  /** Korte teaser in lijst (i.p.v. laatste berichttekst), handig bij lange brieven */
+  listSnippetNl?: string;
   isAnnouncement?: boolean;
   group?: boolean;
   visibleTo: Array<"parent" | "teacher" | "student">;
@@ -82,6 +96,103 @@ export const MOCK_THREADS: MessageThread[] = [
         bodyNl:
           "Volgende week is er een ouderworkshop over stress en rustmomenten. Je kan inschrijven via de agenda.",
         context: { label: "Workshop", when: "Volgende week" },
+      },
+    ],
+  },
+  {
+    id: "thr-oudercontact",
+    titleNl: "Infomoment oudercontact (talenten & kieswijzer)",
+    participantsNl: "IVIO Binnenhof Gent → alle ouders/opvoeders",
+    lastActivityAt: "2026-05-06T09:30:00.000Z",
+    listSnippetNl:
+      "Uitnodiging infomoment: talenten, kieswijzer OV3 en werking van de school — open voor datum, tijd en praktisch.",
+    isAnnouncement: true,
+    group: true,
+    visibleTo: ["parent", "teacher"],
+    messages: [
+      {
+        id: "m-oudercontact-v3",
+        fromName: "Schoolteam IVIO Binnenhof Gent",
+        createdAt: "2026-05-06T09:30:00.000Z",
+        bodyNl: "",
+        context: { label: "Oudercontact", when: "Infomoment" },
+        briefBlocks: [
+          { type: "h2", textNl: "Uitnodiging infomoment" },
+          {
+            type: "p",
+            textNl:
+              "Beste ouder(s), opvoeder(s) of voogd(en), graag nodigen wij jullie uit voor een infomoment op onze school, IVIO Binnenhof Gent.",
+          },
+          {
+            type: "p",
+            textNl:
+              "Tijdens dit moment zetten we de talenten van onze leerlingen in de kijker. We geven meer uitleg over het project “kieswijzer” binnen de richting OV3 en tonen hoe we samen werken aan de groei van elk kind, op maat van zijn of haar kunnen.",
+          },
+          {
+            type: "p",
+            textNl:
+              "Daarnaast maken we jullie graag wegwijs in de werking van onze school, zodat er een duidelijk beeld ontstaat van de hulp en de kansen die we proberen te bieden.",
+          },
+          {
+            type: "facts",
+            items: [
+              { labelNl: "Datum", valueNl: "Wordt nog bevestigd (volgt via agenda)." },
+              { labelNl: "Uur", valueNl: "Wordt nog bevestigd." },
+              { labelNl: "Locatie", valueNl: "IVIO Binnenhof, Gent" },
+            ],
+          },
+          {
+            type: "p",
+            textNl:
+              "Na deze uitleg is er ruimte om vragen te stellen en in gesprek te gaan met onze leerkrachten. We kijken uit naar jullie bezoek!",
+          },
+          {
+            type: "callout",
+            textNl:
+              "Gelieve ons tijdig op de hoogte te brengen van jullie aanwezigheid (via de gekozen aanmeldweg van de school, bijvoorbeeld e-mail of formulier dat jullie ontvangen).",
+          },
+          {
+            type: "signature",
+            linesNl: [
+              "Met vriendelijke groeten",
+              "Het schoolteam IVIO Binnenhof Gent",
+              "Contact: gebruik hier het officiële e-mail/formulier van jullie netwerk (in dit prototype nog niet gekoppeld).",
+            ],
+          },
+          {
+            type: "details",
+            summaryNl: "Voorbereiding — invulreep van de papieren brief",
+            children: [
+              {
+                type: "h2",
+                textNl: "Bijlage uit de gedrukte uitnodiging",
+              },
+              {
+                type: "p",
+                textNl:
+                  "Op papier vind je soms nog een klein invulgreep ter voorbereiding van het gesprek. Je hoeft dit niet hier te typen; dit is alleen als herinnering tijdens oudercontact.",
+              },
+              {
+                type: "facts",
+                items: [
+                  {
+                    labelNl: "Naam",
+                    valueNl: "(invullen op papier of samen tijdens gesprek)",
+                  },
+                  {
+                    labelNl: "Mijn talenten zijn…",
+                    valueNl: "Ruimte om samen aan te vullen tijdens oudercontact.",
+                  },
+                  {
+                    labelNl: "Slagzin (papieren versie)",
+                    valueNl:
+                      "\"Ik kan de wereld aan!\" — gebruik waar passend om het gesprek te openen.",
+                  },
+                ],
+              },
+            ],
+          },
+        ],
       },
     ],
   },

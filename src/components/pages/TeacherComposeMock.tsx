@@ -6,6 +6,7 @@ import { translate } from "@/lib/i18n";
 import { DEMO_USERS } from "@/lib/mock/users";
 import { Card, CardDescription, CardTitle } from "@/components/ui/Card";
 import { Button, ButtonSecondary } from "@/components/ui/Button";
+import { cn, interactiveHoverClasses } from "@/components/ui/ui";
 
 type ComposeMode = "group" | "specific";
 
@@ -44,22 +45,26 @@ export function TeacherComposeMock({ locale }: { locale: Locale }) {
         <button
           type="button"
           onClick={() => setMode("group")}
-          className={`h-12 rounded-2xl border px-3 text-sm font-semibold ${
+          className={cn(
+            interactiveHoverClasses,
+            "h-12 rounded-2xl border px-3 text-sm font-semibold active:scale-[0.99]",
             mode === "group"
-              ? "border-blue-500 bg-blue-500 text-white"
-              : "border-[#d6deea] bg-white text-zinc-900 hover:bg-[#f8fbff]"
-          }`}
+              ? "border-blue-500 bg-blue-500 text-white hover:brightness-110"
+              : "border-[#d6deea] bg-white text-zinc-900 hover:bg-[#f8fbff] hover:border-[#c8d7ea]",
+          )}
         >
           {translate(locale, "Groepsbericht")}
         </button>
         <button
           type="button"
           onClick={() => setMode("specific")}
-          className={`h-12 rounded-2xl border px-3 text-sm font-semibold ${
+          className={cn(
+            interactiveHoverClasses,
+            "h-12 rounded-2xl border px-3 text-sm font-semibold active:scale-[0.99]",
             mode === "specific"
-              ? "border-blue-500 bg-blue-500 text-white"
-              : "border-[#d6deea] bg-white text-zinc-900 hover:bg-[#f8fbff]"
-          }`}
+              ? "border-blue-500 bg-blue-500 text-white hover:brightness-110"
+              : "border-[#d6deea] bg-white text-zinc-900 hover:bg-[#f8fbff] hover:border-[#c8d7ea]",
+          )}
         >
           {translate(locale, "Specifieke ouder(s)")}
         </button>
@@ -72,11 +77,13 @@ export function TeacherComposeMock({ locale }: { locale: Locale }) {
               key={p.id}
               type="button"
               onClick={() => toggleParent(p.id)}
-              className={`flex min-h-12 items-center justify-between rounded-2xl border px-3 text-left text-sm font-semibold ${
+              className={cn(
+                interactiveHoverClasses,
+                "flex min-h-12 items-center justify-between rounded-2xl border px-3 text-left text-sm font-semibold active:scale-[0.99]",
                 selectedParentIds.includes(p.id)
                   ? "border-blue-500 bg-blue-50"
-                  : "border-[#d6deea] bg-white hover:bg-[#f8fbff]"
-              }`}
+                  : "border-[#d6deea] bg-white hover:bg-[#f8fbff] hover:border-[#c8d7ea]",
+              )}
             >
               <span>{p.name}</span>
               <span className="text-xs font-medium text-zinc-500">

@@ -7,7 +7,9 @@ import { t, translate } from "@/lib/i18n";
 import { ITEMS, scoreClusters } from "@/lib/mock/kieswijzer";
 import { Card, CardDescription, CardTitle } from "@/components/ui/Card";
 import { Button, ButtonSecondary } from "@/components/ui/Button";
-import { cn } from "@/components/ui/ui";
+import { cn, interactiveHoverClasses } from "@/components/ui/ui";
+
+type UiKey = Parameters<typeof t>[1];
 import { useSession } from "@/components/session/SessionProvider";
 
 function percent(part: number, total: number) {
@@ -49,6 +51,25 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
   const results = useMemo(() => scoreClusters(selected), [selected]);
   const totalScore = results.reduce((acc, r) => acc + r.score, 0);
   const role = user?.role;
+
+  const kieswijzerSubtitleKey: UiKey =
+    role === "parent"
+      ? "kieswijzer.subtitleParent"
+      : role === "teacher"
+        ? "kieswijzer.subtitleTeacher"
+        : "kieswijzer.subtitle";
+  const techniekenHintKey: UiKey =
+    role === "parent"
+      ? "kieswijzer.techniekenHintParent"
+      : role === "teacher"
+        ? "kieswijzer.techniekenHintTeacher"
+        : "kieswijzer.techniekenHintSelf";
+  const talentenHintKey: UiKey =
+    role === "parent"
+      ? "kieswijzer.talentenHintParent"
+      : role === "teacher"
+        ? "kieswijzer.talentenHintTeacher"
+        : "kieswijzer.talentenHintSelf";
 
   async function refreshContext() {
     const res = await fetch("/api/kieswijzer/context", { credentials: "include" });
@@ -138,14 +159,14 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
         <h1 className="text-2xl font-bold tracking-tight text-white">
           {t(locale, "kieswijzer.title")}
         </h1>
-        <p className="mt-2 text-sm text-blue-100">{t(locale, "kieswijzer.subtitle")}</p>
+        <p className="mt-2 text-sm text-blue-100">{t(locale, kieswijzerSubtitleKey)}</p>
       </Card>
 
       <Card className="bg-[#f8fbff]">
         <CardDescription>
           <button
             type="button"
-            className="underline"
+            className="underline transition-opacity duration-200 motion-reduce:transition-none hover:opacity-75"
             onClick={async () => {
               await refreshContext();
               const id = studentId || (role === "student" ? user?.id ?? "" : "");
@@ -174,9 +195,11 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
                   setStudentId(c.id);
                   await refreshSubmission(c.id);
                 }}
-                className={`h-11 rounded-2xl border px-3 text-left text-sm font-semibold ${
-                  studentId === c.id ? "border-zinc-900 bg-zinc-50" : "border-zinc-200 bg-white"
-                }`}
+                className={cn(
+                  interactiveHoverClasses,
+                  "h-11 rounded-2xl border px-3 text-left text-sm font-semibold active:scale-[0.99]",
+                  studentId === c.id ? "border-zinc-900 bg-zinc-50" : "border-zinc-200 bg-white hover:border-[#c8d7ea]",
+                )}
               >
                 {c.full_name}
               </button>
@@ -192,20 +215,26 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
             <button
               type="button"
               onClick={() => setTeacherMode("fill")}
-              className={`h-11 rounded-2xl border text-sm font-semibold ${
-                teacherMode === "fill" ? "border-zinc-900 bg-zinc-900 text-white" : "border-zinc-200 bg-white"
-              }`}
+              className={cn(
+                interactiveHoverClasses,
+                "h-11 rounded-2xl border text-sm font-semibold active:scale-[0.99]",
+                teacherMode === "fill"
+                  ? "border-zinc-900 bg-zinc-900 text-white hover:brightness-110"
+                  : "border-zinc-200 bg-white hover:border-[#c8d7ea]",
+              )}
             >
               {translate(locale, "Invullen")}
             </button>
             <button
               type="button"
               onClick={() => setTeacherMode("overview")}
-              className={`h-11 rounded-2xl border text-sm font-semibold ${
+              className={cn(
+                interactiveHoverClasses,
+                "h-11 rounded-2xl border text-sm font-semibold active:scale-[0.99]",
                 teacherMode === "overview"
-                  ? "border-zinc-900 bg-zinc-900 text-white"
-                  : "border-zinc-200 bg-white"
-              }`}
+                  ? "border-zinc-900 bg-zinc-900 text-white hover:brightness-110"
+                  : "border-zinc-200 bg-white hover:border-[#c8d7ea]",
+              )}
             >
               {translate(locale, "Resultaten")}
             </button>
@@ -226,9 +255,11 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
                   await refreshSubmission(s.id);
                   await refreshOverview(s.id);
                 }}
-                className={`h-11 rounded-2xl border px-3 text-left text-sm font-semibold ${
-                  studentId === s.id ? "border-zinc-900 bg-zinc-50" : "border-zinc-200 bg-white"
-                }`}
+                className={cn(
+                  interactiveHoverClasses,
+                  "h-11 rounded-2xl border px-3 text-left text-sm font-semibold active:scale-[0.99]",
+                  studentId === s.id ? "border-zinc-900 bg-zinc-50" : "border-zinc-200 bg-white hover:border-[#c8d7ea]",
+                )}
               >
                 {s.full_name}
               </button>
@@ -249,9 +280,13 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
                 key={tab}
                 type="button"
                 onClick={() => setActiveTab(tab)}
-                className={`h-10 rounded-xl border text-xs font-semibold ${
-                  activeTab === tab ? "border-zinc-900 bg-zinc-900 text-white" : "border-zinc-200 bg-white"
-                }`}
+                className={cn(
+                  interactiveHoverClasses,
+                  "h-10 rounded-xl border text-xs font-semibold active:scale-[0.99]",
+                  activeTab === tab
+                    ? "border-zinc-900 bg-zinc-900 text-white hover:brightness-110"
+                    : "border-zinc-200 bg-white hover:border-[#c8d7ea]",
+                )}
               >
                 {tab === "compare"
                   ? translate(locale, "Vergelijking")
@@ -304,7 +339,7 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
         <>
       <Card className="bg-[#f8fbff]">
         <CardTitle>{translate(locale, "Technieken")}</CardTitle>
-        <CardDescription>{translate(locale, "Kies wat je graag doet.")}</CardDescription>
+        <CardDescription>{t(locale, techniekenHintKey)}</CardDescription>
         <div className="mt-3 flex flex-wrap gap-2">
           {technieken.map((item) => {
             const on = selected.includes(item.id);
@@ -318,10 +353,11 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
                   )
                 }
                 className={cn(
+                  interactiveHoverClasses,
                   "rounded-full border px-3 py-2 text-sm font-semibold active:scale-[0.99]",
                   on
-                    ? "border-zinc-900 bg-zinc-900 text-white"
-                    : "border-zinc-200 bg-white text-zinc-900 hover:bg-zinc-50",
+                    ? "border-zinc-900 bg-zinc-900 text-white hover:brightness-110"
+                    : "border-zinc-200 bg-white text-zinc-900 hover:bg-zinc-50 hover:border-[#c8d7ea]",
                 )}
               >
                 {translate(locale, item.labelNl)}
@@ -333,7 +369,7 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
 
       <Card className="bg-[#f8fbff]">
         <CardTitle>{translate(locale, "Talenten")}</CardTitle>
-        <CardDescription>{translate(locale, "Kies wat je goed kan.")}</CardDescription>
+        <CardDescription>{t(locale, talentenHintKey)}</CardDescription>
         <div className="mt-3 flex flex-wrap gap-2">
           {talenten.map((item) => {
             const on = selected.includes(item.id);
@@ -347,10 +383,11 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
                   )
                 }
                 className={cn(
+                  interactiveHoverClasses,
                   "rounded-full border px-3 py-2 text-sm font-semibold active:scale-[0.99]",
                   on
-                    ? "border-zinc-900 bg-zinc-900 text-white"
-                    : "border-zinc-200 bg-white text-zinc-900 hover:bg-zinc-50",
+                    ? "border-zinc-900 bg-zinc-900 text-white hover:brightness-110"
+                    : "border-zinc-200 bg-white text-zinc-900 hover:bg-zinc-50 hover:border-[#c8d7ea]",
                 )}
               >
                 {translate(locale, item.labelNl)}

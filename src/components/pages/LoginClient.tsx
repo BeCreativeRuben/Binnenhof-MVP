@@ -4,9 +4,10 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/components/session/SessionProvider";
 import type { Locale } from "@/lib/locales";
-import { LOCALE_LABELS, LOCALES } from "@/lib/locales";
+import { LOCALE_FLAGS, LOCALE_LABELS, LOCALES } from "@/lib/locales";
 import { t, translate } from "@/lib/i18n";
-import { Button, ButtonSecondary } from "@/components/ui/Button";
+import { Button } from "@/components/ui/Button";
+import { cn, interactiveHoverClasses } from "@/components/ui/ui";
 import { Card, CardDescription, CardTitle } from "@/components/ui/Card";
 
 export function LoginClient({ locale }: { locale: Locale }) {
@@ -19,13 +20,6 @@ export function LoginClient({ locale }: { locale: Locale }) {
 
   return (
     <div className="flex flex-col gap-4 pb-4">
-      <Card className="overflow-hidden border-0 bg-gradient-to-r from-[#4c8eed] to-[#2c66ea] text-white shadow-[0_12px_28px_rgba(44,102,234,0.35)]">
-        <h1 className="text-2xl font-bold tracking-tight text-white">
-          {t(locale, "login.title")}
-        </h1>
-        <p className="mt-2 text-sm text-blue-100">{t(locale, "login.subtitle")}</p>
-      </Card>
-
       <Card>
         <CardTitle>{t(locale, "login.language")}</CardTitle>
         <CardDescription>
@@ -37,13 +31,20 @@ export function LoginClient({ locale }: { locale: Locale }) {
               key={l}
               type="button"
               onClick={() => router.push(`/${l}/login`)}
-              className={`h-12 rounded-2xl border px-3 text-left text-sm font-semibold active:scale-[0.99] ${
+              className={cn(
+                interactiveHoverClasses,
+                "h-12 rounded-2xl border px-3 text-left text-sm font-semibold active:scale-[0.99]",
                 l === locale
                   ? "border-blue-500 bg-blue-50"
-                  : "border-[#d6deea] bg-white hover:bg-[#f8fbff]"
-              }`}
+                  : "border-[#d6deea] bg-white hover:bg-[#f8fbff] hover:border-[#c8d7ea]",
+              )}
             >
-              {LOCALE_LABELS[l]}
+              <span className="flex items-center gap-2">
+                <span className="shrink-0 text-lg leading-none" aria-hidden>
+                  {LOCALE_FLAGS[l]}
+                </span>
+                <span className="min-w-0 truncate">{LOCALE_LABELS[l]}</span>
+              </span>
             </button>
           ))}
         </div>
@@ -93,26 +94,6 @@ export function LoginClient({ locale }: { locale: Locale }) {
         >
           {busy ? translate(locale, "Bezig...") : t(locale, "login.continue")}
         </Button>
-        <ButtonSecondary
-          type="button"
-          onClick={async () => {
-            setBusy(true);
-            setMessage(null);
-            const res = await fetch("/api/setup", { method: "POST" });
-            const data = await res.json();
-            setBusy(false);
-            if (!res.ok || !data.ok) {
-              setMessage(data?.message ?? translate(locale, "Setup mislukt."));
-              return;
-            }
-            setMessage(
-              translate(locale, "Setup klaar. Demo-wachtwoord voor alle accounts: Welkom123!"),
-            );
-          }}
-          disabled={busy}
-        >
-          {translate(locale, "Database setup (demo accounts)")}
-        </ButtonSecondary>
         {message && <p className="text-sm text-zinc-600">{message}</p>}
       </div>
 

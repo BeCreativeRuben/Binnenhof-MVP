@@ -5,6 +5,7 @@ import type { Locale } from "@/lib/locales";
 import { t, translate } from "@/lib/i18n";
 import type { AgendaItem } from "@/lib/mock/agenda";
 import { Card, CardDescription, CardTitle } from "@/components/ui/Card";
+import { cn, interactiveHoverClasses } from "@/components/ui/ui";
 
 function stableDateTime(iso: string) {
   const d = new Date(iso);
@@ -115,7 +116,10 @@ export function AgendaList({
           <button
             type="button"
             onClick={() => moveMonth(-1)}
-            className="h-10 w-10 rounded-full border border-zinc-200 bg-white text-lg font-semibold"
+            className={cn(
+              interactiveHoverClasses,
+              "h-10 w-10 rounded-full border border-zinc-200 bg-white text-lg font-semibold active:scale-[0.96] hover:border-[#c8d7ea]",
+            )}
             aria-label={translate(locale, "Vorige maand")}
           >
             ‹
@@ -124,7 +128,10 @@ export function AgendaList({
           <button
             type="button"
             onClick={() => moveMonth(1)}
-            className="h-10 w-10 rounded-full border border-zinc-200 bg-white text-lg font-semibold"
+            className={cn(
+              interactiveHoverClasses,
+              "h-10 w-10 rounded-full border border-zinc-200 bg-white text-lg font-semibold active:scale-[0.96] hover:border-[#c8d7ea]",
+            )}
             aria-label={translate(locale, "Volgende maand")}
           >
             ›
@@ -152,13 +159,15 @@ export function AgendaList({
                 key={key}
                 type="button"
                 onClick={() => setSelectedDayKey(key)}
-                className={`relative h-12 rounded-2xl border text-sm font-semibold active:scale-[0.98] ${
+                className={cn(
+                  interactiveHoverClasses,
+                  "relative h-12 rounded-2xl border text-sm font-semibold active:scale-[0.98]",
                   isSelected
-                    ? "border-blue-500 bg-blue-500 text-white"
+                    ? "border-blue-500 bg-blue-500 text-white hover:brightness-110"
                     : hasItems
-                      ? "border-blue-200 bg-blue-50 text-blue-700"
-                      : "border-zinc-200 bg-white text-zinc-700"
-                }`}
+                      ? "border-blue-200 bg-blue-50 text-blue-700 hover:border-blue-300"
+                      : "border-zinc-200 bg-white text-zinc-700 hover:border-[#c8d7ea]",
+                )}
               >
                 {day}
                 {hasItems && !isSelected && (

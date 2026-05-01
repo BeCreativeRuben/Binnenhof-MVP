@@ -6,6 +6,7 @@ import { Card, CardDescription, CardTitle } from "@/components/ui/Card";
 import { RequireRole } from "@/components/session/RequireRole";
 import { translate } from "@/lib/i18n";
 import { MOCK_THREADS } from "@/lib/mock/messages";
+import { cn, interactiveHoverClasses } from "@/components/ui/ui";
 
 export default async function ParentDashboard({
   params,
@@ -34,7 +35,10 @@ export default async function ParentDashboard({
         <div className="mt-3 grid grid-cols-2 gap-3">
           <Link
             href={`/${locale}/parent/messages`}
-            className="rounded-[22px] border border-[#d6deea] bg-white p-4 shadow-[0_4px_14px_rgba(31,52,88,0.08)]"
+            className={cn(
+              interactiveHoverClasses,
+              "rounded-[22px] border border-[#d6deea] bg-white p-4 shadow-[0_4px_14px_rgba(31,52,88,0.08)] hover:border-[#c8d7ea]",
+            )}
           >
             <div className="flex items-center gap-3">
               <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[#4a90e2] text-white">
@@ -48,7 +52,10 @@ export default async function ParentDashboard({
           </Link>
           <Link
             href={`/${locale}/parent/agenda`}
-            className="rounded-[22px] border border-[#d6deea] bg-white p-4 shadow-[0_4px_14px_rgba(31,52,88,0.08)]"
+            className={cn(
+              interactiveHoverClasses,
+              "rounded-[22px] border border-[#d6deea] bg-white p-4 shadow-[0_4px_14px_rgba(31,52,88,0.08)] hover:border-[#c8d7ea]",
+            )}
           >
             <div className="flex items-center gap-3">
               <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[#22c55e] text-white">
@@ -62,7 +69,10 @@ export default async function ParentDashboard({
           </Link>
           <Link
             href={`/${locale}/parent/workshops`}
-            className="rounded-[22px] border border-[#d6deea] bg-white p-4 shadow-[0_4px_14px_rgba(31,52,88,0.08)]"
+            className={cn(
+              interactiveHoverClasses,
+              "rounded-[22px] border border-[#d6deea] bg-white p-4 shadow-[0_4px_14px_rgba(31,52,88,0.08)] hover:border-[#c8d7ea]",
+            )}
           >
             <div className="flex items-center gap-3">
               <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[#a855f7] text-white">
@@ -76,7 +86,10 @@ export default async function ParentDashboard({
           </Link>
           <Link
             href={`/${locale}/parent/kieswijzer`}
-            className="rounded-[22px] border border-[#d6deea] bg-white p-4 shadow-[0_4px_14px_rgba(31,52,88,0.08)]"
+            className={cn(
+              interactiveHoverClasses,
+              "rounded-[22px] border border-[#d6deea] bg-white p-4 shadow-[0_4px_14px_rgba(31,52,88,0.08)] hover:border-[#c8d7ea]",
+            )}
           >
             <div className="flex items-center gap-3">
               <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[#f97316] text-white">
@@ -103,7 +116,10 @@ export default async function ParentDashboard({
           <div className="mt-3">
             <Link
               href={`/${locale}/parent/messages/${latest.id}`}
-              className="inline-flex h-12 w-full items-center justify-center rounded-2xl bg-zinc-900 text-[15px] font-semibold text-white shadow-sm active:scale-[0.99]"
+              className={cn(
+                interactiveHoverClasses,
+                "inline-flex h-12 w-full items-center justify-center rounded-2xl bg-zinc-900 text-[15px] font-semibold text-white shadow-sm active:scale-[0.99]",
+              )}
             >
               {t(locale, "messages.title")}
             </Link>

@@ -5,6 +5,7 @@ import { t, translate } from "@/lib/i18n";
 import { Card, CardDescription, CardTitle } from "@/components/ui/Card";
 import { RequireRole } from "@/components/session/RequireRole";
 import { MOCK_THREADS } from "@/lib/mock/messages";
+import { cn, interactiveHoverClasses } from "@/components/ui/ui";
 
 export default async function TeacherDashboard({
   params,
@@ -32,7 +33,10 @@ export default async function TeacherDashboard({
         <div className="mt-3 grid grid-cols-2 gap-3">
           <Link
             href={`/${locale}/teacher/messages`}
-            className="group rounded-[22px] border border-[#d6deea] bg-white p-4 shadow-[0_4px_14px_rgba(31,52,88,0.08)]"
+            className={cn(
+              interactiveHoverClasses,
+              "group rounded-[22px] border border-[#d6deea] bg-white p-4 shadow-[0_4px_14px_rgba(31,52,88,0.08)] hover:border-[#c8d7ea]",
+            )}
           >
             <div className="flex items-center gap-3">
               <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[#4a90e2] text-white">
@@ -46,7 +50,10 @@ export default async function TeacherDashboard({
           </Link>
           <Link
             href={`/${locale}/teacher/agenda`}
-            className="group rounded-[22px] border border-[#d6deea] bg-white p-4 shadow-[0_4px_14px_rgba(31,52,88,0.08)]"
+            className={cn(
+              interactiveHoverClasses,
+              "group rounded-[22px] border border-[#d6deea] bg-white p-4 shadow-[0_4px_14px_rgba(31,52,88,0.08)] hover:border-[#c8d7ea]",
+            )}
           >
             <div className="flex items-center gap-3">
               <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[#22c55e] text-white">
@@ -60,7 +67,10 @@ export default async function TeacherDashboard({
           </Link>
           <Link
             href={`/${locale}/teacher/workshops`}
-            className="group rounded-[22px] border border-[#d6deea] bg-white p-4 shadow-[0_4px_14px_rgba(31,52,88,0.08)]"
+            className={cn(
+              interactiveHoverClasses,
+              "group rounded-[22px] border border-[#d6deea] bg-white p-4 shadow-[0_4px_14px_rgba(31,52,88,0.08)] hover:border-[#c8d7ea]",
+            )}
           >
             <div className="flex items-center gap-3">
               <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[#a855f7] text-white">
@@ -74,7 +84,10 @@ export default async function TeacherDashboard({
           </Link>
           <Link
             href={`/${locale}/teacher/kieswijzer`}
-            className="group rounded-[22px] border border-[#d6deea] bg-white p-4 shadow-[0_4px_14px_rgba(31,52,88,0.08)]"
+            className={cn(
+              interactiveHoverClasses,
+              "group rounded-[22px] border border-[#d6deea] bg-white p-4 shadow-[0_4px_14px_rgba(31,52,88,0.08)] hover:border-[#c8d7ea]",
+            )}
           >
             <div className="flex items-center gap-3">
               <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[#f97316] text-white">
@@ -103,7 +116,10 @@ export default async function TeacherDashboard({
           <div className="mt-3">
             <Link
               href={`/${locale}/teacher/messages/${latest.id}`}
-              className="inline-flex h-12 w-full items-center justify-center rounded-2xl bg-[#2f3e58] text-[15px] font-semibold text-white shadow-[0_4px_12px_rgba(47,62,88,0.3)] active:scale-[0.99]"
+              className={cn(
+                interactiveHoverClasses,
+                "inline-flex h-12 w-full items-center justify-center rounded-2xl bg-[#2f3e58] text-[15px] font-semibold text-white shadow-[0_4px_12px_rgba(47,62,88,0.3)] active:scale-[0.99]",
+              )}
             >
               <Sparkles className="mr-2 h-4 w-4" />
               {translate(locale, "Bekijk alle berichten")}

@@ -35,6 +35,16 @@ const UI_NL: Dictionary = {
   "kieswijzer.title": "Kieswijzer",
   "kieswijzer.subtitle":
     "Kies wat bij jou past. Je krijgt een ranglijst met mogelijke richtingen.",
+  "kieswijzer.subtitleParent":
+    "Vul dit in voor uw kind (selecteer wie hieronder). Bij technieken en talenten vult u in wat bij hen past — niet wat u als ouder voor uzelf zou aanvinken. Hierna volgt een ranglijst met mogelijke richtingen.",
+  "kieswijzer.subtitleTeacher":
+    "Vul dit in voor de gekozen leerling: bij technieken en talenten geeft u aan wat bij hen past. Hierna volgt een ranglijst met mogelijke richtingen.",
+  "kieswijzer.techniekenHintSelf": "Kies wat je graag doet.",
+  "kieswijzer.talentenHintSelf": "Kies wat je goed kan.",
+  "kieswijzer.techniekenHintParent": "Geef aan wat uw kind graag doet.",
+  "kieswijzer.talentenHintParent": "Geef aan waar uw kind goed in is.",
+  "kieswijzer.techniekenHintTeacher": "Geef aan wat deze leerling graag doet.",
+  "kieswijzer.talentenHintTeacher": "Geef aan waar deze leerling goed in is.",
   "kieswijzer.start": "Start quiz",
   "kieswijzer.results": "Resultaten",
   "student.assignments.title": "Opdrachtjes",
@@ -76,6 +86,16 @@ const UI_EN: Dictionary = {
   "workshops.emailPreview": "Email preview",
   "kieswijzer.title": "Choice guide",
   "kieswijzer.subtitle": "Select what fits. You get a ranked list of directions.",
+  "kieswijzer.subtitleParent":
+    "Fill this in for your child (select them below). For techniques and talents, tick what fits them — not what you’d pick for yourself as an adult. You’ll see a ranked list of directions.",
+  "kieswijzer.subtitleTeacher":
+    "Fill this in for the selected student: indicate what fits them under techniques and talents. Then you’ll see a ranked list of directions.",
+  "kieswijzer.techniekenHintSelf": "Choose what you like doing.",
+  "kieswijzer.talentenHintSelf": "Choose what you’re good at.",
+  "kieswijzer.techniekenHintParent": "Say what your child likes doing.",
+  "kieswijzer.talentenHintParent": "Say what your child is good at.",
+  "kieswijzer.techniekenHintTeacher": "Say what this learner likes doing.",
+  "kieswijzer.talentenHintTeacher": "Say what this learner is good at.",
   "kieswijzer.start": "Start quiz",
   "kieswijzer.results": "Results",
   "student.assignments.title": "Assignments",
@@ -116,6 +136,16 @@ const UI_TR: Dictionary = {
   "workshops.emailPreview": "E-posta onizlemesi",
   "kieswijzer.title": "Secim rehberi",
   "kieswijzer.subtitle": "Sana uygun olanlari sec. Olasi yonler icin bir siralama gorursun.",
+  "kieswijzer.subtitleParent":
+    "Bunu cocugunuz icin doldurun (asagidan secin). Teknik ve yeteneklerde ona uyanlari isaretleyin — kendiniz icin degil. Ardından olası yonler icin bir siralama gorursunuz.",
+  "kieswijzer.subtitleTeacher":
+    "Secilen ogrenci icin doldurun: teknik ve yeteneklerde ona uyanlari belirtin. Sonra olası yonler icin bir siralama gorursunuz.",
+  "kieswijzer.techniekenHintSelf": "Yapmayı sevdiklerini seç.",
+  "kieswijzer.talentenHintSelf": "İyi olduklarını seç.",
+  "kieswijzer.techniekenHintParent": "Çocuğunuzun yapmayı sevdiklerini belirtin.",
+  "kieswijzer.talentenHintParent": "Çocuğunuzun iyi olduğu alanları belirtin.",
+  "kieswijzer.techniekenHintTeacher": "Bu öğrencinin yapmayı sevdiklerini belirtin.",
+  "kieswijzer.talentenHintTeacher": "Bu öğrencinin iyi olduğu alanları belirtin.",
   "kieswijzer.start": "Teste basla",
   "kieswijzer.results": "Sonuclar",
   "student.assignments.title": "Gorevler",
@@ -158,6 +188,16 @@ const UI_BG: Dictionary = {
   "kieswijzer.title": "Pomosht pri izbor",
   "kieswijzer.subtitle":
     "Izberi kakvo ti podhozhda. Shte poluchish klasacia na vazmozhni nasoki.",
+  "kieswijzer.subtitleParent":
+    "Fill this in for your child (select them below). For techniques and talents, tick what fits them — not what you’d pick for yourself as an adult. You’ll see a ranked list of directions.",
+  "kieswijzer.subtitleTeacher":
+    "Fill this in for the selected student: indicate what fits them under techniques and talents. Then you’ll see a ranked list of directions.",
+  "kieswijzer.techniekenHintSelf": "Izberi kakvo obichash da pravish.",
+  "kieswijzer.talentenHintSelf": "Izberi v kakvo si silen.",
+  "kieswijzer.techniekenHintParent": "Say what your child likes doing.",
+  "kieswijzer.talentenHintParent": "Say what your child is good at.",
+  "kieswijzer.techniekenHintTeacher": "Say what this learner likes doing.",
+  "kieswijzer.talentenHintTeacher": "Say what this learner is good at.",
   "kieswijzer.start": "Startirai testa",
   "kieswijzer.results": "Rezultati",
   "student.assignments.title": "Zadachi",
@@ -200,6 +240,16 @@ const UI_SK: Dictionary = {
   "kieswijzer.title": "Sprievodca vyberom",
   "kieswijzer.subtitle":
     "Vyberte, co vam vyhovuje. Dostanete rebricek moznych smerov.",
+  "kieswijzer.subtitleParent":
+    "Fill this in for your child (select them below). For techniques and talents, tick what fits them — not what you’d pick for yourself as an adult. You’ll see a ranked list of directions.",
+  "kieswijzer.subtitleTeacher":
+    "Fill this in for the selected student: indicate what fits them under techniques and talents. Then you’ll see a ranked list of directions.",
+  "kieswijzer.techniekenHintSelf": "Vyberte, co radi robíte.",
+  "kieswijzer.talentenHintSelf": "Vyberte, čo viete dobre.",
+  "kieswijzer.techniekenHintParent": "Say what your child likes doing.",
+  "kieswijzer.talentenHintParent": "Say what your child is good at.",
+  "kieswijzer.techniekenHintTeacher": "Say what this learner likes doing.",
+  "kieswijzer.talentenHintTeacher": "Say what this learner is good at.",
   "kieswijzer.start": "Spustit kviz",
   "kieswijzer.results": "Vysledky",
   "student.assignments.title": "Ulohy",
@@ -241,6 +291,16 @@ const UI_PS: Dictionary = {
   "workshops.emailPreview": "د ايمېل مخکتنه",
   "kieswijzer.title": "د انتخاب لارښود",
   "kieswijzer.subtitle": "هغه څه وټاکئ چې درته مناسب دي. د ممکنه لارو لېست به ووينئ.",
+  "kieswijzer.subtitleParent":
+    "Fill this in for your child (select them below). For techniques and talents, tick what fits them — not what you’d pick for yourself as an adult. You’ll see a ranked list of directions.",
+  "kieswijzer.subtitleTeacher":
+    "Fill this in for the selected student: indicate what fits them under techniques and talents. Then you’ll see a ranked list of directions.",
+  "kieswijzer.techniekenHintSelf": "هغه وټاکئ څه چې تاسو خوښوي.",
+  "kieswijzer.talentenHintSelf": "هغه وټاکئ په کوم کې غوره ياست.",
+  "kieswijzer.techniekenHintParent": "Say what your child likes doing.",
+  "kieswijzer.talentenHintParent": "Say what your child is good at.",
+  "kieswijzer.techniekenHintTeacher": "Say what this learner likes doing.",
+  "kieswijzer.talentenHintTeacher": "Say what this learner is good at.",
   "kieswijzer.start": "کويز پيل کړئ",
   "kieswijzer.results": "پايلې",
   "student.assignments.title": "دندې",
@@ -281,6 +341,16 @@ const UI_FA: Dictionary = {
   "workshops.emailPreview": "پیش‌نمایش ایمیل",
   "kieswijzer.title": "راهنمای انتخاب",
   "kieswijzer.subtitle": "چیزی را انتخاب کنید که مناسب شماست. رتبه‌بندی مسیرهای ممکن را می‌بینید.",
+  "kieswijzer.subtitleParent":
+    "این را برای فرزندتان پر کنید (پایین انتخاب کنید). در بخش مهارت‌ها و استعدادها آنچه برای او مناسب است را بزنید — نه آنچه خودتان دوست دارید. پس از آن فهرست رتبه‌بندی‌شدهٔ مسیرهای ممکن را می‌بینید.",
+  "kieswijzer.subtitleTeacher":
+    "این را برای دانش‌آموز انتخاب‌شده پر کنید: در مهارت‌ها و استعدادها نشان دهید چه چیزی برای او مناسب است. سپس فهرست رتبه‌بندی‌شده را می‌بینید.",
+  "kieswijzer.techniekenHintSelf": "کارهایی را انتخاب کنید که دوست دارید انجام دهید.",
+  "kieswijzer.talentenHintSelf": "کارهایی را انتخاب کنید که در آن‌ها خوب هستید.",
+  "kieswijzer.techniekenHintParent": "بگویید فرزندتان چه کارهایی را دوست دارد انجام دهد.",
+  "kieswijzer.talentenHintParent": "بگویید فرزندتان در چه چیزهایی خوب است.",
+  "kieswijzer.techniekenHintTeacher": "بگویید این دانش‌آموز چه کارهایی را دوست دارد انجام دهد.",
+  "kieswijzer.talentenHintTeacher": "بگویید این دانش‌آموز در چه چیزهایی خوب است.",
   "kieswijzer.start": "شروع آزمون",
   "kieswijzer.results": "نتایج",
   "student.assignments.title": "وظایف",
