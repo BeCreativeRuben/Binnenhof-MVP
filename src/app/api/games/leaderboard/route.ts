@@ -23,7 +23,14 @@ export async function GET(req: NextRequest) {
   const user = await getSessionUserFromRequest(req);
   if (!user) return NextResponse.json({ ok: false, message: "Unauthorized" }, { status: 401 });
   const gameType = req.nextUrl.searchParams.get("gameType");
-  if (gameType !== "memory" && gameType !== "connect") {
+  if (
+    gameType !== "memory" &&
+    gameType !== "connect" &&
+    gameType !== "flashcards" &&
+    gameType !== "flashcards_reflect" &&
+    gameType !== "word_memory" &&
+    gameType !== "education_match"
+  ) {
     return NextResponse.json({ ok: false, message: "Invalid game type" }, { status: 400 });
   }
 

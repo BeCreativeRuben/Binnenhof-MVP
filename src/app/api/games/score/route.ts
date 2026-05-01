@@ -11,7 +11,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, message: "Unauthorized" }, { status: 401 });
   }
   const payload = (await req.json()) as {
-    gameType?: "memory" | "connect";
+    gameType?:
+      | "memory"
+      | "connect"
+      | "flashcards"
+      | "flashcards_reflect"
+      | "word_memory"
+      | "education_match";
     timeMs?: number;
     mistakes?: number;
   };
