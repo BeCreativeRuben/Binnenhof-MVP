@@ -559,6 +559,7 @@ const DYNAMIC_EN: Record<string, string> = {
 };
 
 const DYNAMIC_TR: Record<string, string> = {
+  "Focus op het spel": "Oyuna odaklan",
   "(MVP: geen echte communicatie)": "(MVP: gercek iletisim yok)",
   "1-op-1, groepsberichten en mededelingen (mock data).": "Bire bir mesajlar, grup mesajlari ve duyurular (ornek veri).",
   "Aan": "Alici",
