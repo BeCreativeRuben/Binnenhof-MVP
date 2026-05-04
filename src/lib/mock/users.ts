@@ -15,7 +15,7 @@ export const DEMO_USERS: Record<Role, DemoUser[]> = {
       classId: null,
       teacherUserId: null,
       languagePreference: "tr",
-      linkedStudentIds: ["s-1"],
+      linkedStudentIds: ["s-3"],
     },
     {
       id: "p-2",
@@ -25,7 +25,7 @@ export const DEMO_USERS: Record<Role, DemoUser[]> = {
       classId: null,
       teacherUserId: null,
       languagePreference: "bg",
-      linkedStudentIds: ["s-2"],
+      linkedStudentIds: ["s-1"],
     },
     {
       id: "p-3",
@@ -35,7 +35,7 @@ export const DEMO_USERS: Record<Role, DemoUser[]> = {
       classId: null,
       teacherUserId: null,
       languagePreference: "en",
-      linkedStudentIds: ["s-1", "s-3"],
+      linkedStudentIds: ["s-2"],
     },
   ],
   teacher: [
