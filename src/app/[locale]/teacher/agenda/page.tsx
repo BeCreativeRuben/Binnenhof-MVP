@@ -1,7 +1,7 @@
 import type { Locale } from "@/lib/locales";
 import { RequireRole } from "@/components/session/RequireRole";
 import { MOCK_AGENDA } from "@/lib/mock/agenda";
-import { AgendaList } from "@/components/pages/Agenda";
+import { TeacherAgendaClient } from "@/components/pages/TeacherAgendaClient";
 
 export default async function TeacherAgenda({
   params,
@@ -12,7 +12,7 @@ export default async function TeacherAgenda({
   return (
     <div className="flex flex-col gap-4">
       <RequireRole locale={locale} role="teacher" />
-      <AgendaList locale={locale} items={MOCK_AGENDA} />
+      <TeacherAgendaClient locale={locale} baseItems={MOCK_AGENDA} />
     </div>
   );
 }
