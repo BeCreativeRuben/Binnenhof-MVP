@@ -21,9 +21,12 @@ function stableDateTime(iso: string) {
 export function AgendaList({
   locale,
   items,
+  showTeacherBadge = false,
 }: {
   locale: Locale;
   items: AgendaItem[];
+  /** When true, items with teacherCreated get a badge (teacher agenda UI). */
+  showTeacherBadge?: boolean;
 }) {
   const sorted = useMemo(
     () => [...items].sort((a, b) => a.startsAt.localeCompare(b.startsAt)),
@@ -204,7 +207,7 @@ export function AgendaList({
                   {translate(locale, item.descriptionNl)}
                 </div>
               )}
-              <div className="mt-2 inline-flex items-center">
+              <div className="mt-2 flex flex-wrap items-center gap-2">
                 <span className="rounded-full border border-zinc-200 bg-zinc-50 px-2 py-1 text-xs font-semibold text-zinc-700">
                   {item.type === "workshop"
                     ? t(locale, "nav.workshops")
@@ -212,6 +215,11 @@ export function AgendaList({
                       ? t(locale, "student.title")
                       : translate(locale, "School")}
                 </span>
+                {showTeacherBadge && item.teacherCreated && (
+                  <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-emerald-800">
+                    {t(locale, "agenda.badgeTeacher")}
+                  </span>
+                )}
               </div>
             </div>
           ))}

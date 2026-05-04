@@ -6,6 +6,8 @@ export type AgendaItem = {
   locationNl?: string;
   descriptionNl?: string;
   type: "school" | "workshop" | "student";
+  /** Present when loaded from teacher-created agenda API rows */
+  teacherCreated?: boolean;
 };
 
 export const MOCK_AGENDA: AgendaItem[] = [
