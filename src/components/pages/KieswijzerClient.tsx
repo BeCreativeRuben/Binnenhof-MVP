@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import jsPDF from "jspdf";
 import type { Locale } from "@/lib/locales";
 import { t, translate } from "@/lib/i18n";
@@ -32,7 +32,7 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
     roleScores: Array<{ role: RoleName; results: Array<{ cluster: { id: string; titleNl: string; subtitleNl: string }; score: number }> }>;
   } | null;
 
-  const { user } = useSession();
+  const { user, loading: sessionLoading } = useSession();
   const technieken = useMemo(() => ITEMS.filter((i) => i.kind === "techniek"), []);
   const talenten = useMemo(() => ITEMS.filter((i) => i.kind === "talent"), []);
   const [selected, setSelected] = useState<string[]>([]);
@@ -71,21 +71,67 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
         ? "kieswijzer.talentenHintTeacher"
         : "kieswijzer.talentenHintSelf";
 
-  async function refreshContext() {
-    const res = await fetch("/api/kieswijzer/context", { credentials: "include" });
-    const data = (await res.json()) as ContextData;
-    setContext(data);
+  const refreshOverview = useCallback(
+    async (selectedStudentId: string) => {
+      if (!selectedStudentId || role !== "teacher") return;
+      const res = await fetch(`/api/kieswijzer/overview?studentId=${selectedStudentId}`, {
+        credentials: "include",
+      });
+      const data = (await res.json()) as { ok: boolean } & OverviewData;
+      setOverview(data?.ok ? data : null);
+    },
+    [role],
+  );
 
-    if (data?.role === "student" && data?.student?.id) {
-      setStudentId(data.student.id);
+  const refreshContext = useCallback(async () => {
+    const res = await fetch("/api/kieswijzer/context", { credentials: "include" });
+    const raw = (await res.json()) as ContextData &
+      Partial<{ ok: boolean }> &
+      Partial<{ role: RoleName | string }>;
+
+    if (!res.ok || (raw && typeof raw === "object" && "ok" in raw && raw.ok === false)) {
+      setContext(null);
+      return;
     }
-    if (data?.role === "parent" && data?.children?.[0]?.id && !studentId) {
-      setStudentId(data.children[0].id);
+
+    if (raw?.role === "parent" && raw && "children" in raw && Array.isArray(raw.children)) {
+      const children = raw.children as PersonRef[];
+      setContext({ role: "parent", children });
+      setStudentId((prev) =>
+        prev && children.some((c) => c.id === prev) ? prev : (children[0]?.id ?? ""),
+      );
+      return;
     }
-    if (data?.role === "teacher" && data?.students?.[0]?.id && !studentId) {
-      setStudentId(data.students[0].id);
+
+    if (raw?.role === "teacher" && raw && "students" in raw && Array.isArray(raw.students)) {
+      const students = raw.students as PersonRef[];
+      setContext({ role: "teacher", students });
+      setStudentId((prev) =>
+        prev && students.some((s) => s.id === prev) ? prev : (students[0]?.id ?? ""),
+      );
+      return;
     }
-  }
+
+    if (raw?.role === "student" && raw && "student" in raw && raw.student) {
+      const st = raw.student as PersonRef;
+      setContext({ role: "student", student: st });
+      if (st.id) setStudentId(st.id);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (sessionLoading || !user) return;
+    queueMicrotask(() => {
+      void refreshContext();
+    });
+  }, [sessionLoading, user, refreshContext]);
+
+  useEffect(() => {
+    if (!studentId || user?.role !== "teacher" || context?.role !== "teacher") return;
+    queueMicrotask(() => {
+      void refreshOverview(studentId);
+    });
+  }, [studentId, user?.role, context?.role, refreshOverview]);
 
   async function refreshSubmission(selectedStudentId: string) {
     if (!selectedStudentId) return;
@@ -93,15 +139,6 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
       credentials: "include",
     });
     await res.json();
-  }
-
-  async function refreshOverview(selectedStudentId: string) {
-    if (!selectedStudentId || role !== "teacher") return;
-    const res = await fetch(`/api/kieswijzer/overview?studentId=${selectedStudentId}`, {
-      credentials: "include",
-    });
-    const data = (await res.json()) as { ok: boolean } & OverviewData;
-    setOverview(data?.ok ? data : null);
   }
 
   const effectiveStudentId = studentId || (role === "student" ? user?.id ?? "" : "");
