@@ -13,7 +13,7 @@ import {
   TentTree,
   UserRound,
 } from "lucide-react";
-import type { ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { cn, interactiveHoverClasses } from "@/components/ui/ui";
 import { LOCALE_FLAGS, LOCALE_LABELS, LOCALES, type Locale } from "@/lib/locales";
 import { t } from "@/lib/i18n";
@@ -58,6 +58,26 @@ export function ShellClient({
   const pathname = usePathname();
   const router = useRouter();
   const { user, logout } = useSession();
+  const [langMenuOpen, setLangMenuOpen] = useState(false);
+  const langMenuRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!langMenuOpen) return;
+    const handlePointerDown = (e: PointerEvent) => {
+      const root = langMenuRef.current;
+      if (!root || root.contains(e.target as Node)) return;
+      setLangMenuOpen(false);
+    };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setLangMenuOpen(false);
+    };
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [langMenuOpen]);
 
   const isLogin = pathname?.endsWith("/login");
   const showNav = !isLogin;
@@ -133,47 +153,64 @@ export function ShellClient({
             )}
           </div>
 
-          <details className="relative">
-            <summary className="list-none">
-              <span
-                className={cn(
-                  interactiveHoverClasses,
-                  "inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[#d2dbea] bg-white shadow-[0_2px_8px_rgba(31,52,88,0.1)] active:scale-[0.98]",
-                )}
+          <div ref={langMenuRef} className="relative">
+            <button
+              type="button"
+              id="language-menu-trigger"
+              aria-expanded={langMenuOpen}
+              aria-haspopup="listbox"
+              aria-controls="language-menu-list"
+              aria-label={t(locale, "login.language")}
+              onClick={() => setLangMenuOpen((o) => !o)}
+              className={cn(
+                interactiveHoverClasses,
+                "inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[#d2dbea] bg-white shadow-[0_2px_8px_rgba(31,52,88,0.1)] active:scale-[0.98]",
+              )}
+            >
+              <Languages className="h-5 w-5" aria-hidden />
+            </button>
+            {langMenuOpen && (
+              <div
+                id="language-menu-list"
+                role="listbox"
+                aria-labelledby="language-menu-trigger"
+                className="absolute right-0 mt-2 w-56 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-lg"
               >
-                <Languages className="h-5 w-5" />
-              </span>
-            </summary>
-            <div className="absolute right-0 mt-2 w-56 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-lg">
-              <div className="px-3 py-2 text-xs font-medium text-zinc-600">
-                {t(locale, "login.language")}
-              </div>
-              <div className="max-h-72 overflow-auto p-1">
-                {LOCALES.map((l) => (
-                  <button
-                    key={l}
-                    type="button"
-                    onClick={() => router.replace(replaceLocale(pathname ?? `/${locale}/login`, l))}
-                    className={cn(
-                      interactiveHoverClasses,
-                      "flex w-full items-center justify-between rounded-xl px-3 py-2 text-sm hover:bg-zinc-50",
-                      l === locale && "bg-zinc-50 font-semibold",
-                    )}
-                  >
-                    <span className="flex min-w-0 items-center gap-2">
-                      <span className="shrink-0 text-base leading-none" aria-hidden>
-                        {LOCALE_FLAGS[l]}
+                <div className="px-3 py-2 text-xs font-medium text-zinc-600">
+                  {t(locale, "login.language")}
+                </div>
+                <div className="max-h-72 overflow-auto p-1">
+                  {LOCALES.map((l) => (
+                    <button
+                      key={l}
+                      type="button"
+                      role="option"
+                      aria-selected={l === locale}
+                      onClick={() => {
+                        router.replace(replaceLocale(pathname ?? `/${locale}/login`, l));
+                        setLangMenuOpen(false);
+                      }}
+                      className={cn(
+                        interactiveHoverClasses,
+                        "flex w-full items-center justify-between rounded-xl px-3 py-2 text-sm hover:bg-zinc-50",
+                        l === locale && "bg-zinc-50 font-semibold",
+                      )}
+                    >
+                      <span className="flex min-w-0 items-center gap-2">
+                        <span className="shrink-0 text-base leading-none" aria-hidden>
+                          {LOCALE_FLAGS[l]}
+                        </span>
+                        <span className="truncate text-left">{LOCALE_LABELS[l]}</span>
                       </span>
-                      <span className="truncate text-left">{LOCALE_LABELS[l]}</span>
-                    </span>
-                    {l === locale && (
-                      <span className="shrink-0 text-xs text-zinc-500">✓</span>
-                    )}
-                  </button>
-                ))}
+                      {l === locale && (
+                        <span className="shrink-0 text-xs text-zinc-500">✓</span>
+                      )}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
-          </details>
+            )}
+          </div>
 
           {user && (
             <button
