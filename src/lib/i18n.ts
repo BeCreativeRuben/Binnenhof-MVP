@@ -475,6 +475,7 @@ const DYNAMIC_EN: Record<string, string> = {
     "Click start and stop when you are done. Fastest time wins.",
   "Klik start en stop wanneer je klaar bent. Minste fouten wint bij gelijke tijd.":
     "Click start and stop when you are done. Fewest mistakes win on equal time.",
+  "Focus op het spel": "Focus on the game",
   "Kies een rol en taal. Dit is een demo-login met mock data.":
     "Choose a role and language. This is a demo login with mock data.",
   "Kies wat bij jou past. Je krijgt een ranglijst met mogelijke richtingen.":
@@ -558,6 +559,7 @@ const DYNAMIC_EN: Record<string, string> = {
 };
 
 const DYNAMIC_TR: Record<string, string> = {
+  "Focus op het spel": "Oyuna odaklan",
   "(MVP: geen echte communicatie)": "(MVP: gercek iletisim yok)",
   "1-op-1, groepsberichten en mededelingen (mock data).": "Bire bir mesajlar, grup mesajlari ve duyurular (ornek veri).",
   "Aan": "Alici",
