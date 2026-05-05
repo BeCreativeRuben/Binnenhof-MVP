@@ -482,7 +482,7 @@ export function AssignmentsClient({ locale }: { locale: Locale }) {
           <div
             className={cn(
               "grid grid-cols-4",
-              large ? "mx-auto max-w-xl gap-3 sm:max-w-2xl sm:gap-4" : "gap-2",
+              large ? "mx-auto w-full max-w-[22rem] gap-2 sm:max-w-[26rem] sm:gap-3" : "gap-2",
             )}
           >
             {memoryDeck.map((icon, idx) => {
@@ -495,7 +495,7 @@ export function AssignmentsClient({ locale }: { locale: Locale }) {
                   className={cn(
                     interactiveHoverClasses,
                     large
-                      ? "flex min-h-[4.5rem] items-center justify-center rounded-2xl border text-4xl active:scale-[0.98] sm:aspect-square sm:min-h-0 sm:text-5xl"
+                      ? "aspect-square flex items-center justify-center rounded-2xl border text-3xl active:scale-[0.98] sm:text-4xl"
                       : "aspect-square rounded-2xl border text-2xl active:scale-[0.98]",
                     visible
                       ? "border-blue-300 bg-blue-50"
