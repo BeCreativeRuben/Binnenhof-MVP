@@ -2,13 +2,26 @@ import { neon } from "@neondatabase/serverless";
 
 let cached: ReturnType<typeof neon> | null = null;
 
+function normalizeNeonUrl(rawUrl: string) {
+  try {
+    const parsed = new URL(rawUrl);
+    // Some Neon pooler setups can fail in serverless runtimes with channel_binding=require.
+    if (parsed.searchParams.get("channel_binding") === "require") {
+      parsed.searchParams.delete("channel_binding");
+    }
+    return parsed.toString();
+  } catch {
+    return rawUrl;
+  }
+}
+
 export function getSql() {
   const url = process.env.NEON_DATABASE_URL;
   if (!url) {
     throw new Error("NEON_DATABASE_URL is not set");
   }
   if (!cached) {
-    cached = neon(url);
+    cached = neon(normalizeNeonUrl(url));
   }
   return cached;
 }
