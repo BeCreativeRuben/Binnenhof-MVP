@@ -1229,7 +1229,7 @@ export function AssignmentsClient({ locale }: { locale: Locale }) {
             )}
           >
             <X className="h-4 w-4" aria-hidden />
-            <span className="hidden sm:inline">{translate(locale, "common.back")}</span>
+            <span className="hidden sm:inline">{t(locale, "common.back")}</span>
           </button>
         </div>
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4 sm:px-6 sm:py-6">
