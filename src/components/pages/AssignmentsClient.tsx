@@ -904,7 +904,12 @@ export function AssignmentsClient({ locale }: { locale: Locale }) {
         ) : null}
 
         {fcFinished && fcLastMs !== null ? (
-          <div className={cn("mt-3 flex flex-col gap-3", large && "mx-auto w-full max-w-xl")}>
+          <div
+            className={cn(
+              "mt-3 flex flex-col gap-3",
+              large && "mx-auto w-full max-w-xl min-h-[52vh] justify-center",
+            )}
+          >
             <div
               className={cn(
                 "rounded-2xl border border-emerald-200 bg-emerald-50 text-emerald-900",
@@ -950,7 +955,12 @@ export function AssignmentsClient({ locale }: { locale: Locale }) {
         ) : null}
 
         {frFinished && frLastMs !== null ? (
-          <div className={cn("mt-3 flex flex-col gap-3", large && "mx-auto w-full max-w-xl")}>
+          <div
+            className={cn(
+              "mt-3 flex flex-col gap-3",
+              large && "mx-auto w-full max-w-xl min-h-[52vh] justify-center",
+            )}
+          >
             <div
               className={cn(
                 "rounded-2xl border border-cyan-200 bg-cyan-50 text-cyan-950",
@@ -1093,7 +1103,12 @@ export function AssignmentsClient({ locale }: { locale: Locale }) {
         ) : null}
 
         {eoFinished && eoLastMs !== null ? (
-          <div className={cn("mt-3 flex flex-col gap-3", large && "mx-auto w-full max-w-xl")}>
+          <div
+            className={cn(
+              "mt-3 flex flex-col gap-3",
+              large && "mx-auto w-full max-w-xl min-h-[52vh] justify-center",
+            )}
+          >
             <div
               className={cn(
                 "rounded-2xl border border-emerald-200 bg-emerald-50 text-emerald-900",
