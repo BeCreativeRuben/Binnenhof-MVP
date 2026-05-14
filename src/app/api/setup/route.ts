@@ -30,14 +30,14 @@ export async function POST() {
       ON CONFLICT (id) DO NOTHING
     `;
 
+    // One parent ↔ one student: Noah–Maria, Mila–Sarah, Yusuf–Aylin (re-sync each setup run).
+    await sql`DELETE FROM parent_student_links`;
     await sql`
       INSERT INTO parent_student_links (parent_user_id, student_user_id)
       VALUES
-        ('p-1', 's-1'),
-        ('p-2', 's-2'),
-        ('p-3', 's-1'),
-        ('p-3', 's-3')
-      ON CONFLICT (parent_user_id, student_user_id) DO NOTHING
+        ('p-2', 's-1'),
+        ('p-3', 's-2'),
+        ('p-1', 's-3')
     `;
 
     return NextResponse.json({
