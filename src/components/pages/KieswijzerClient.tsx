@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import jsPDF from "jspdf";
 import type { Locale } from "@/lib/locales";
 import { t, translate } from "@/lib/i18n";
@@ -47,6 +47,7 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
   const [activeTab, setActiveTab] = useState<"parent" | "student" | "teacher" | "compare">(
     "compare",
   );
+  const resultsSectionRef = useRef<HTMLDivElement | null>(null);
 
   const results = useMemo(() => scoreClusters(selected), [selected]);
   const totalScore = results.reduce((acc, r) => acc + r.score, 0);
@@ -105,6 +106,17 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
   }
 
   const effectiveStudentId = studentId || (role === "student" ? user?.id ?? "" : "");
+
+  useEffect(() => {
+    if (!submitted) return;
+    const id = window.requestAnimationFrame(() => {
+      resultsSectionRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    });
+    return () => window.cancelAnimationFrame(id);
+  }, [submitted]);
 
   function exportOverviewPdf() {
     if (!overview?.student) return;
@@ -442,38 +454,47 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
       </Card>
 
       {submitted && (
-        <Card className="bg-[#f8fbff]">
-          <CardTitle>{t(locale, "kieswijzer.results")}</CardTitle>
-          <CardDescription>
-            {translate(locale, "Score op basis van je keuzes. Resultaat wordt pas na definitieve submit getoond.")}
-          </CardDescription>
+        <div
+          ref={resultsSectionRef}
+          id="kieswijzer-results"
+          role="status"
+          aria-live="polite"
+          className="scroll-mt-4"
+        >
+          <Card className="bg-[#f8fbff]">
+            <p className="mb-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-950">
+              {t(locale, "kieswijzer.submittedSuccess")}
+            </p>
+            <CardTitle>{t(locale, "kieswijzer.results")}</CardTitle>
+            <CardDescription>{t(locale, "kieswijzer.resultsHintSubmitted")}</CardDescription>
 
-          <div className="mt-4 flex flex-col gap-3">
-            {results.map((r) => (
-              <div key={r.cluster.id} className="rounded-2xl border border-zinc-200 bg-white p-3">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="min-w-0">
-                    <div className="truncate text-sm font-semibold">
-                      {translate(locale, r.cluster.titleNl)}
+            <div className="mt-4 flex flex-col gap-3">
+              {results.map((r) => (
+                <div key={r.cluster.id} className="rounded-2xl border border-zinc-200 bg-white p-3">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <div className="truncate text-sm font-semibold">
+                        {translate(locale, r.cluster.titleNl)}
+                      </div>
+                      <div className="mt-1 text-xs text-zinc-600">
+                        {translate(locale, r.cluster.subtitleNl)}
+                      </div>
                     </div>
-                    <div className="mt-1 text-xs text-zinc-600">
-                      {translate(locale, r.cluster.subtitleNl)}
+                    <div className="shrink-0 rounded-full border border-zinc-200 bg-zinc-50 px-2 py-1 text-xs font-semibold">
+                      {r.score} • {percent(r.score, totalScore)}%
                     </div>
                   </div>
-                  <div className="shrink-0 rounded-full border border-zinc-200 bg-zinc-50 px-2 py-1 text-xs font-semibold">
-                    {r.score} • {percent(r.score, totalScore)}%
+                  <div className="mt-3 h-2 overflow-hidden rounded-full bg-zinc-100">
+                    <div
+                      className="h-full rounded-full bg-zinc-900"
+                      style={{ width: `${percent(r.score, Math.max(totalScore, 1))}%` }}
+                    />
                   </div>
                 </div>
-                <div className="mt-3 h-2 overflow-hidden rounded-full bg-zinc-100">
-                  <div
-                    className="h-full rounded-full bg-zinc-900"
-                    style={{ width: `${percent(r.score, Math.max(totalScore, 1))}%` }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </Card>
+              ))}
+            </div>
+          </Card>
+        </div>
       )}
       </>
       )}

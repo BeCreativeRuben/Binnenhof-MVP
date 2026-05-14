@@ -47,6 +47,9 @@ const UI_NL: Dictionary = {
   "kieswijzer.talentenHintTeacher": "Geef aan waar deze leerling goed in is.",
   "kieswijzer.start": "Start quiz",
   "kieswijzer.results": "Resultaten",
+  "kieswijzer.submittedSuccess": "Succesvol ingediend. De antwoorden zijn opgeslagen.",
+  "kieswijzer.resultsHintSubmitted":
+    "Onderstaande scores zijn gebaseerd op wat je net hebt ingediend.",
   "student.assignments.title": "Opdrachtjes",
   "student.assignments.subtitle":
     "Korte spelletjes en taken. Je resultaten worden bewaard in dit prototype (op dit toestel).",
@@ -98,6 +101,8 @@ const UI_EN: Dictionary = {
   "kieswijzer.talentenHintTeacher": "Say what this learner is good at.",
   "kieswijzer.start": "Start quiz",
   "kieswijzer.results": "Results",
+  "kieswijzer.submittedSuccess": "Submitted successfully. Your answers have been saved.",
+  "kieswijzer.resultsHintSubmitted": "The scores below are based on what you just submitted.",
   "student.assignments.title": "Assignments",
   "student.assignments.subtitle": "Short games and tasks. Results are stored per account.",
   "teacher.title": "Teacher",
@@ -148,6 +153,8 @@ const UI_TR: Dictionary = {
   "kieswijzer.talentenHintTeacher": "Bu öğrencinin iyi olduğu alanları belirtin.",
   "kieswijzer.start": "Teste basla",
   "kieswijzer.results": "Sonuclar",
+  "kieswijzer.submittedSuccess": "Basariyla gonderildi. Yanitlariniz kaydedildi.",
+  "kieswijzer.resultsHintSubmitted": "Asagidaki puanlar az once gonderdiginiz secimlere dayanir.",
   "student.assignments.title": "Gorevler",
   "student.assignments.subtitle":
     "Kisa oyunlar ve gorevler. Sonuclar bu prototipte hesabina kaydedilir.",
@@ -200,6 +207,8 @@ const UI_BG: Dictionary = {
   "kieswijzer.talentenHintTeacher": "Say what this learner is good at.",
   "kieswijzer.start": "Startirai testa",
   "kieswijzer.results": "Rezultati",
+  "kieswijzer.submittedSuccess": "Uspeshno podadeno. Otvorovete sa zapazeni.",
+  "kieswijzer.resultsHintSubmitted": "Rezultatite dolu sa bazirani na izbora, koito podadoh.",
   "student.assignments.title": "Zadachi",
   "student.assignments.subtitle":
     "Kratki igri i zadachi. Rezultatite se zapazvat za profila ti.",
@@ -252,6 +261,8 @@ const UI_SK: Dictionary = {
   "kieswijzer.talentenHintTeacher": "Say what this learner is good at.",
   "kieswijzer.start": "Spustit kviz",
   "kieswijzer.results": "Vysledky",
+  "kieswijzer.submittedSuccess": "Uspesne odoslane. Odpovede su ulozene.",
+  "kieswijzer.resultsHintSubmitted": "Skore nizsie vychadzaju z prave odoslaneho vyberu.",
   "student.assignments.title": "Ulohy",
   "student.assignments.subtitle":
     "Kratke hry a ulohy. Vysledky sa ukladaju pre vas ucet.",
@@ -303,6 +314,8 @@ const UI_PS: Dictionary = {
   "kieswijzer.talentenHintTeacher": "Say what this learner is good at.",
   "kieswijzer.start": "کويز پيل کړئ",
   "kieswijzer.results": "پايلې",
+  "kieswijzer.submittedSuccess": "په برياليتوب سره وسپارل شو. ځوابونه خوندي شول.",
+  "kieswijzer.resultsHintSubmitted": "لاندې نمرې هغه څه دي چې تاسو هماغه وخت وسپارل.",
   "student.assignments.title": "دندې",
   "student.assignments.subtitle": "لنډې لوبې او دندې. پايلې ستاسې په حساب کې خوندي کېږي.",
   "teacher.title": "ښوونکی",
@@ -353,6 +366,8 @@ const UI_FA: Dictionary = {
   "kieswijzer.talentenHintTeacher": "بگویید این دانش‌آموز در چه چیزهایی خوب است.",
   "kieswijzer.start": "شروع آزمون",
   "kieswijzer.results": "نتایج",
+  "kieswijzer.submittedSuccess": "با موفقیت ارسال شد. پاسخ‌های شما ذخیره شد.",
+  "kieswijzer.resultsHintSubmitted": "امتیازهای زیر بر اساس همان چیزی است که همین الان ارسال کردید.",
   "student.assignments.title": "وظایف",
   "student.assignments.subtitle": "بازی‌ها و تمرین‌های کوتاه. نتایج برای حساب شما ذخیره می‌شود.",
   "teacher.title": "معلم",
