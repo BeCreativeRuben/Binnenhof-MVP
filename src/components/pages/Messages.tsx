@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 import type { Locale } from "@/lib/locales";
 import { t, translate } from "@/lib/i18n";
 import type { BriefBlock, MessageThread } from "@/lib/mock/messages";
@@ -109,29 +110,48 @@ export function MessagesList({
       </Card>
 
       {threads.map((thr) => (
-        <Link key={thr.id} href={`${basePath}/messages/${thr.id}`} className="block rounded-[22px]">
-          <Card
-            className={cn(interactiveHoverClasses, "hover:border-[#c8d7ea] hover:bg-[#f8fbff]")}
-          >
-            <CardTitle>{translate(locale, thr.titleNl)}</CardTitle>
-            <CardDescription>{translate(locale, thr.participantsNl)}</CardDescription>
-            <div className="mt-3 line-clamp-2 text-sm text-zinc-700">
-              {translate(
-                locale,
-                thr.listSnippetNl ??
-                  thr.messages.at(-1)?.bodyNl ??
-                  "",
-              )}
-            </div>
-            {thr.messages.at(-1)?.context?.label && (
-              <div className="mt-3 inline-flex items-center gap-2 text-xs font-medium text-[#5f6c84]">
-                <span className="rounded-full border border-[#d6deea] bg-[#f6f9ff] px-2 py-1">
-                  {t(locale, "messages.context")}:{" "}
-                  {translate(locale, thr.messages.at(-1)?.context?.label ?? "")}
-                </span>
-                <span className="text-zinc-400">{t(locale, "common.optional")}</span>
+        <Link
+          key={thr.id}
+          href={`${basePath}/messages/${thr.id}`}
+          className={cn(
+            interactiveHoverClasses,
+            "group block rounded-[22px] outline-none ring-offset-2 focus-visible:ring-2 focus-visible:ring-[#4a78b8]",
+          )}
+          aria-label={`${translate(locale, thr.titleNl)} — ${t(locale, "messages.openThreadHint")}`}
+        >
+          <Card className="hover:border-[#c8d7ea] hover:bg-[#f8fbff]">
+            <div className="flex items-start gap-3">
+              <div className="min-w-0 flex-1">
+                <CardTitle>{translate(locale, thr.titleNl)}</CardTitle>
+                <CardDescription>{translate(locale, thr.participantsNl)}</CardDescription>
+                <div className="mt-3 line-clamp-2 text-sm text-zinc-700">
+                  {translate(
+                    locale,
+                    thr.listSnippetNl ??
+                      thr.messages.at(-1)?.bodyNl ??
+                      "",
+                  )}
+                </div>
+                {thr.messages.at(-1)?.context?.label && (
+                  <div className="mt-3 inline-flex flex-wrap items-center gap-2 text-xs font-medium text-[#5f6c84]">
+                    <span className="rounded-full border border-[#d6deea] bg-[#f6f9ff] px-2 py-1">
+                      {t(locale, "messages.context")}:{" "}
+                      {translate(locale, thr.messages.at(-1)?.context?.label ?? "")}
+                    </span>
+                    <span className="text-zinc-400">{t(locale, "common.optional")}</span>
+                  </div>
+                )}
+                <p className="mt-3 text-xs font-medium text-[#4a78b8] group-hover:underline">
+                  {t(locale, "messages.openForContext")}
+                </p>
               </div>
-            )}
+              <span
+                className="mt-0.5 flex shrink-0 self-center text-zinc-400 transition-colors group-hover:text-[#355a9a]"
+                aria-hidden
+              >
+                <ChevronRight className="h-7 w-7" strokeWidth={2.25} />
+              </span>
+            </div>
           </Card>
         </Link>
       ))}
