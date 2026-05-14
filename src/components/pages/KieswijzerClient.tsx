@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import jsPDF from "jspdf";
 import type { Locale } from "@/lib/locales";
 import { t, translate } from "@/lib/i18n";
@@ -17,15 +17,39 @@ function percent(part: number, total: number) {
   return Math.round((part / total) * 100);
 }
 
-export function KieswijzerClient({ locale }: { locale: Locale }) {
-  type PersonRef = { id: string; full_name: string; class_id: string | null };
-  type ContextData =
-    | { role: "parent"; children: PersonRef[] }
-    | { role: "teacher"; students: PersonRef[] }
-    | { role: "student"; student: PersonRef }
-    | null;
+type RoleName = "parent" | "student" | "teacher";
+
+type PersonRef = { id: string; full_name: string; class_id: string | null };
+type ContextData =
+  | { role: "parent"; children: PersonRef[] }
+  | { role: "teacher"; students: PersonRef[] }
+  | { role: "student"; student: PersonRef }
+  | null;
+type KieswijzerSubmissionRow = {
+  submitted_role: RoleName;
+  selected_item_ids: string[] | string;
+  comment: string | null;
+};
+
+function parseSelectedItemIds(raw: string[] | string): string[] {
+  if (Array.isArray(raw)) return raw;
+  if (typeof raw === "string") {
+    try {
+      const parsed = JSON.parse(raw) as unknown;
+      return Array.isArray(parsed) ? (parsed as string[]) : [];
+    } catch {
+      return [];
+    }
+  }
+  return [];
+}
+
+export function KieswijzerClient(props: { locale: Locale }) {
+  return <KieswijzerClientInner key={props.locale} {...props} />;
+}
+
+function KieswijzerClientInner({ locale }: { locale: Locale }) {
   type Submission = { selected_item_ids: string[]; comment: string | null };
-  type RoleName = "parent" | "student" | "teacher";
   type OverviewData = {
     student: PersonRef;
     submissions: Partial<Record<RoleName, Submission | null>>;
@@ -71,40 +95,91 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
         ? "kieswijzer.talentenHintTeacher"
         : "kieswijzer.talentenHintSelf";
 
-  async function refreshContext() {
+  const applySubmissionForRole = useCallback((rows: KieswijzerSubmissionRow[] | undefined, forRole: RoleName) => {
+    const row = rows?.find((r) => r.submitted_role === forRole);
+    if (!row) {
+      setSubmitted(false);
+      setSelected([]);
+      setComment("");
+      return;
+    }
+    setSubmitted(true);
+    setSelected(parseSelectedItemIds(row.selected_item_ids));
+    setComment(row.comment ?? "");
+  }, []);
+
+  const refreshSubmission = useCallback(
+    async (selectedStudentId: string, forRole: RoleName) => {
+      if (!selectedStudentId) return;
+      const res = await fetch(`/api/kieswijzer/submission?studentId=${selectedStudentId}`, {
+        credentials: "include",
+      });
+      const data = (await res.json()) as { ok?: boolean; submissions?: KieswijzerSubmissionRow[] };
+      if (!res.ok || !data.ok || !data.submissions) return;
+      applySubmissionForRole(data.submissions, forRole);
+    },
+    [applySubmissionForRole],
+  );
+
+  const refreshContext = useCallback(async (): Promise<string> => {
     const res = await fetch("/api/kieswijzer/context", { credentials: "include" });
     const data = (await res.json()) as ContextData;
     setContext(data);
 
-    if (data?.role === "student" && data?.student?.id) {
-      setStudentId(data.student.id);
+    if (data?.role === "student" && data.student?.id) {
+      const id = data.student.id;
+      setStudentId(id);
+      return id;
     }
-    if (data?.role === "parent" && data?.children?.[0]?.id && !studentId) {
-      setStudentId(data.children[0].id);
-    }
-    if (data?.role === "teacher" && data?.students?.[0]?.id && !studentId) {
-      setStudentId(data.students[0].id);
-    }
-  }
 
-  async function refreshSubmission(selectedStudentId: string) {
-    if (!selectedStudentId) return;
-    const res = await fetch(`/api/kieswijzer/submission?studentId=${selectedStudentId}`, {
-      credentials: "include",
-    });
-    await res.json();
-  }
+    if (data?.role === "parent") {
+      const children = data.children ?? [];
+      const keep =
+        studentId && children.some((c) => c.id === studentId) ? studentId : (children[0]?.id ?? "");
+      setStudentId(keep);
+      return keep;
+    }
 
-  async function refreshOverview(selectedStudentId: string) {
-    if (!selectedStudentId || role !== "teacher") return;
-    const res = await fetch(`/api/kieswijzer/overview?studentId=${selectedStudentId}`, {
-      credentials: "include",
-    });
-    const data = (await res.json()) as { ok: boolean } & OverviewData;
-    setOverview(data?.ok ? data : null);
-  }
+    if (data?.role === "teacher") {
+      const students = data.students ?? [];
+      const keep =
+        studentId && students.some((s) => s.id === studentId) ? studentId : (students[0]?.id ?? "");
+      setStudentId(keep);
+      return keep;
+    }
+
+    return "";
+  }, [studentId]);
+
+  const refreshOverview = useCallback(
+    async (selectedStudentId: string) => {
+      if (!selectedStudentId || role !== "teacher") return;
+      const res = await fetch(`/api/kieswijzer/overview?studentId=${selectedStudentId}`, {
+        credentials: "include",
+      });
+      const data = (await res.json()) as { ok: boolean } & OverviewData;
+      setOverview(data?.ok ? data : null);
+    },
+    [role],
+  );
 
   const effectiveStudentId = studentId || (role === "student" ? user?.id ?? "" : "");
+
+  useEffect(() => {
+    if (!user?.role) return;
+    let cancelled = false;
+    void (async () => {
+      const id = await refreshContext();
+      if (cancelled || !id) return;
+      await refreshSubmission(id, user.role);
+      if (user.role === "teacher") {
+        await refreshOverview(id);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.id, user?.role, locale, refreshContext, refreshSubmission, refreshOverview]);
 
   function exportOverviewPdf() {
     if (!overview?.student) return;
@@ -168,11 +243,10 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
             type="button"
             className="underline transition-opacity duration-200 motion-reduce:transition-none hover:opacity-75"
             onClick={async () => {
-              await refreshContext();
-              const id = studentId || (role === "student" ? user?.id ?? "" : "");
-              if (id) {
-                await refreshSubmission(id);
-                if (role === "teacher") {
+              const id = await refreshContext();
+              if (id && user?.role) {
+                await refreshSubmission(id, user.role);
+                if (user.role === "teacher") {
                   await refreshOverview(id);
                 }
               }
@@ -193,7 +267,7 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
                 type="button"
                 onClick={async () => {
                   setStudentId(c.id);
-                  await refreshSubmission(c.id);
+                  await refreshSubmission(c.id, "parent");
                 }}
                 className={cn(
                   interactiveHoverClasses,
@@ -252,7 +326,7 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
                 type="button"
                 onClick={async () => {
                   setStudentId(s.id);
-                  await refreshSubmission(s.id);
+                  await refreshSubmission(s.id, "teacher");
                   await refreshOverview(s.id);
                 }}
                 className={cn(
@@ -432,7 +506,9 @@ export function KieswijzerClient({ locale }: { locale: Locale }) {
                 return;
               }
               setSubmitted(true);
-              await refreshSubmission(effectiveStudentId);
+              if (user?.role) {
+                await refreshSubmission(effectiveStudentId, user.role);
+              }
             }}
           >
             {translate(locale, "Definitief indienen")}
