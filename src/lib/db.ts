@@ -76,4 +76,18 @@ export async function ensureSchema() {
     ALTER TABLE game_scores ADD CONSTRAINT game_scores_game_type_check
     CHECK (game_type IN ('memory', 'connect', 'flashcards', 'flashcards_reflect', 'word_memory', 'education_match'));
   `;
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS teacher_agenda_items (
+      id TEXT PRIMARY KEY,
+      teacher_user_id TEXT NOT NULL REFERENCES app_users(id) ON DELETE CASCADE,
+      title_nl TEXT NOT NULL,
+      starts_at TIMESTAMPTZ NOT NULL,
+      ends_at TIMESTAMPTZ,
+      location_nl TEXT,
+      description_nl TEXT,
+      item_type TEXT NOT NULL CHECK (item_type IN ('school', 'workshop', 'student')),
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+  `;
 }
